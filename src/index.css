@@ -1,0 +1,180 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-surface-card: #222222;
+  --color-outline-variant: #3b4949;
+  --color-surface-bright: #393939;
+  --color-primary-container: #00d2d3;
+  --color-on-secondary-fixed-variant: #004e59;
+  --color-text-primary: #f8fafc;
+  --color-secondary-fixed-dim: #44d8f1;
+  --color-background: #131313;
+  --color-on-error: #690005;
+  --color-on-tertiary-container: #005270;
+  --color-secondary-container: #00bcd4;
+  --color-tertiary-fixed: #c4e7ff;
+  --color-surface-variant: #353535;
+  --color-outline: #859493;
+  --color-tertiary-fixed-dim: #7bd0ff;
+  --color-on-tertiary: #00354a;
+  --color-on-secondary: #00363e;
+  --color-tertiary: #acdfff;
+  --color-on-surface: #e5e2e1;
+  --color-secondary-fixed: #a1efff;
+  --color-tertiary-container: #5ac8ff;
+  --color-on-background: #e5e2e1;
+  --color-inverse-surface: #e5e2e1;
+  --color-surface-tint: #26dcdd;
+  --color-text-secondary: #e2e8f0;
+  --color-surface-container-high: #2a2a2a;
+  --color-on-error-container: #ffdad6;
+  --color-surface-elevated: #2d2d2d;
+  --color-on-tertiary-fixed-variant: #004c69;
+  --color-border-highlight: #00d2d3;
+  --color-primary: #48efef;
+  --color-surface-container: #20201f;
+  --color-on-primary: #003737;
+  --color-primary-fixed-dim: #26dcdd;
+  --color-on-secondary-fixed: #001f25;
+  --color-text-muted: #94a3b8;
+  --color-surface-container-highest: #353535;
+  --color-surface-dim: #131313;
+  --color-surface-base: #1b1b1b;
+  --color-on-primary-fixed: #002020;
+  --color-error-container: #93000a;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-on-primary-fixed-variant: #004f50;
+  --color-error: #ffb4ab;
+  --color-inverse-on-surface: #313030;
+  --color-border-subtle: #333333;
+  --color-inverse-primary: #006a6a;
+  --color-on-surface-variant: #bacac9;
+  --color-surface-container-low: #1b1b1b;
+  --color-on-secondary-container: #004650;
+  --color-surface: #131313;
+  --color-on-primary-container: #003738;
+  --color-on-tertiary-fixed: #001e2c;
+  --color-secondary: #44d8f1;
+  --color-primary-fixed: #56f9f9;
+  --color-breezy-accent: #04b4e0;
+
+  --spacing-margin: 1rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-gutter-md: 1.5rem;
+  --spacing-gutter: 1rem;
+  --spacing-space-2xl: 4rem;
+  --spacing-space-md: 1rem;
+  --spacing-margin-md: 2rem;
+  --spacing-margin-lg: 3rem;
+  --spacing-gutter-lg: 2rem;
+  --spacing-space-lg: 1.5rem;
+
+  --font-headline-lg: "Poppins", "Inter", sans-serif;
+  --font-headline-md: "Poppins", "Inter", sans-serif;
+  --font-headline-sm: "Poppins", "Inter", sans-serif;
+  --font-display-hero: "Poppins", "Inter", sans-serif;
+  --font-body-lg: "Open Sans", "Inter", sans-serif;
+  --font-body-md: "Open Sans", "Inter", sans-serif;
+  --font-body-sm: "Open Sans", "Inter", sans-serif;
+  --font-label-md: "Inter", sans-serif;
+  --font-label-sm: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #131313;
+    color: #e5e2e1;
+  }
+
+  body {
+    overscroll-behavior: none;
+  }
+}
+
+/* Custom typography helper classes matching code_2304b432.html */
+.text-display-hero {
+  font-size: clamp(2.15rem, 3.8vw, 3.35rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 800;
+}
+
+.text-headline-lg {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 2.5rem;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.text-headline-md {
+  font-size: 1.375rem;
+  line-height: 1.875rem;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.text-headline-sm {
+  font-size: 1.125rem;
+  line-height: 1.625rem;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-size: 1rem;
+  line-height: 1.65rem;
+  font-weight: 400;
+}
+
+.text-body-md {
+  font-size: 0.9rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+}
+
+.text-body-sm {
+  font-size: 0.775rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+.text-label-md {
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+}
+
+.text-label-sm {
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+
+/* Subtle custom scrollbar for modals and sidebars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #1b1b1b;
+}
+::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00d2d3;
+}

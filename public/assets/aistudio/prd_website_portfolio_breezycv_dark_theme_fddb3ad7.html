@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRD - Website Portfolio Pribadi (BreezyCV Dark Theme)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #1a1a1a;
+      --bg-surface: #222222;
+      --bg-elevated: #2d2d2d;
+      --accent: #04b4e0;
+      --accent-soft: rgba(4, 180, 224, 0.14);
+      --text-primary: #f5f5f5;
+      --text-secondary: #cccccc;
+      --text-muted: #999999;
+      --border: #3d3d3d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Open Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 2.5rem 3rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    header.doc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(4, 180, 224, 0.35);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      background-color: var(--bg-elevated);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      font-size: 13.5px;
+    }
+
+    .meta-item strong {
+      color: var(--accent);
+      display: block;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    h2 {
+      font-size: 21px;
+      margin-top: 2.25rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 20px;
+      background-color: var(--accent);
+      border-radius: 3px;
+    }
+
+    h3 {
+      font-size: 16.5px;
+      color: var(--accent);
+      margin-top: 1.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    p {
+      color: var(--text-secondary);
+      margin-bottom: 0.9rem;
+    }
+
+    ul, ol {
+      margin-left: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    li {
+      margin-bottom: 0.45rem;
+    }
+
+    li strong {
+      color: var(--text-primary);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: var(--bg-elevated);
+      color: var(--accent);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+    }
+
+    th {
+      background-color: var(--bg-elevated);
+      color: var(--text-primary);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    td {
+      color: var(--text-secondary);
+    }
+
+    .swatch {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      vertical-align: middle;
+      margin-right: 6px;
+      border: 1px solid #666;
+    }
+
+    .callout {
+      background-color: var(--bg-elevated);
+      border-left: 3px solid var(--accent);
+      padding: 0.9rem 1.15rem;
+      border-radius: 6px;
+      margin: 1rem 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .checklist {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: var(--bg-elevated);
+      padding: 0.65rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .checklist input[type="checkbox"] {
+      margin-top: 4px;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 1.5rem 1.25rem;
+      }
+      h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="doc-header">
+      <span class="badge">Product Requirements Document</span>
+      <h1>Website Portfolio Pribadi (Referensi Desain BreezyCV Dark Full-Width)</h1>
+      <div class="meta-grid">
+        <div class="meta-item">
+          <strong>Versi Dokumen</strong>
+          v1.0
+        </div>
+        <div class="meta-item">
+          <strong>Tanggal</strong>
+          16 November 2026
+        </div>
+        <div class="meta-item">
+          <strong>Referensi Desain</strong>
+          BreezyCV Dark Full-Width vCard
+        </div>
+        <div class="meta-item">
+          <strong>Target Pengguna</strong>
+          Rekruter IT, HRD, Engineering Manager &amp; Klien
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <h2>1. Ringkasan Eksekutif &amp; Tujuan Produk</h2>
+      <p>
+        Website ini adalah platform portfolio digital satu halaman (<em>Single-Page Application</em> / vCard) bertema gelap (<em>Dark Mode</em>) yang dirancang untuk mempresentasikan identitas profesional, keahlian teknis (<em>Full-Stack Development &amp; Manufacturing IT</em>), riwayat pengalaman, dan studi kasus sistem yang telah dibangun.
+      </p>
+      <ul>
+        <li><strong>Tujuan Utama:</strong> Memberikan kesan pertama yang kuat dalam waktu &lt; 10 detik, memvalidasi kompetensi teknis melalui bukti proyek nyata, serta mempermudah konversi kontak (undangan wawancara atau konsultasi proyek).</li>
+        <li><strong>Indikator Keberhasilan (KPI):</strong> Pengunjung dapat mengunduh CV dalam 1 klik, memfilter studi kasus proyek berdasarkan kategori tanpa <em>page reload</em>, dan mengirimkan pesan kontak secara langsung.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. Arsitektur Desain &amp; Spesifikasi Visual (Design System)</h2>
+
+      <h3>A. Tata Letak Utama (Layout Architecture)</h3>
+      <p>
+        Website menggunakan arsitektur <strong>Split-Screen Fixed Sidebar + Dynamic Content Area</strong> di layar desktop (<code>&gt;= 1024px</code>) dan berubah menjadi <strong>Top Header + Drawer Menu</strong> di perangkat mobile/tablet (<code>&lt; 1024px</code>).
+      </p>
+      <ol>
+        <li><strong>Panel Kiri — Fixed Identity Sidebar (Lebar ~28%–30% atau maksimal <code>380px</code>):</strong> Bersifat statis (<em>sticky</em>) saat halaman berpindah menu. Memuat foto profil bulat (<code>180px × 180px</code>), Nama Lengkap, Jabatan Utama, ikon sosial media (GitHub, LinkedIn, WhatsApp/Email), tombol CTA utama (<strong>Download CV</strong>), dan teks <em>Copyright</em>.</li>
+        <li><strong>Panel Kanan — Dynamic Content Canvas (Lebar ~70%–72%):</strong> Area utama tempat konten dirender berdasarkan navigasi <em>hash</em> (<code>#home</code>, <code>#about-me</code>, <code>#resume</code>, <code>#portfolio</code>, <code>#blog</code>, <code>#contact</code>) dengan transisi halaman halus (<em>smooth slide/fade animation</em>).</li>
+        <li><strong>Navigasi Ikon Mengambang (Floating Icon Navigation):</strong> Terletak di sisi paling kanan berupa tombol ikon vertikal dengan <em>tooltip</em> label menu saat di-<em>hover</em>.</li>
+      </ol>
+
+      <h3>B. Palet Warna (Color Palette — Dark Tech Theme)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Token Warna</th>
+            <th>Kode Hex</th>
+            <th>Penggunaan Komponen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Background Primary</strong></td>
+            <td><span class="swatch" style="background:#222222;"></span><code>#222222</code></td>
+            <td>Latar belakang utama kanvas konten (<em>Content Area</em>)</td>
+          </tr>
+          <tr>
+            <td><strong>Background Secondary</strong></td>
+            <td><span class="swatch" style="background:#333333;"></span><code>#333333</code> / <code>#444444</code></td>
+            <td>Latar belakang <em>Fixed Sidebar</em>, kartu proyek, dan <em>progress bar track</em></td>
+          </tr>
+          <tr>
+            <td><strong>Accent Primary</strong></td>
+            <td><span class="swatch" style="background:#04B4E0;"></span><code>#04B4E0</code></td>
+            <td>Tombol CTA, garis bawah judul (<em>section divider</em>), <em>active menu icon</em>, dan bar persentase keahlian</td>
+          </tr>
+          <tr>
+            <td><strong>Text Primary</strong></td>
+            <td><span class="swatch" style="background:#F5F5F5;"></span><code>#F5F5F5</code> / <code>#FFFFFF</code></td>
+            <td>Judul utama (<code>H1</code>–<code>H3</code>), nama, dan teks penekanan</td>
+          </tr>
+          <tr>
+            <td><strong>Text Secondary</strong></td>
+            <td><span class="swatch" style="background:#D5D5D5;"></span><code>#D5D5D5</code> / <code>#A1A1AA</code></td>
+            <td>Paragraf deskripsi, label biodata, dan subjudul</td>
+          </tr>
+          <tr>
+            <td><strong>Border &amp; Divider</strong></td>
+            <td><span class="swatch" style="background:#444444;"></span><code>#444444</code></td>
+            <td>Garis pemisah tipis antar elemen, <em>border</em> kartu, dan input form</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>C. Tipografi (Typography)</h3>
+      <ul>
+        <li><strong>Font Heading &amp; Navigasi:</strong> <code>Poppins</code> (Semi-Bold <code>600</code> &amp; Bold <code>700</code>). <code>H1</code>: <code>48px</code> (Desktop) / <code>32px</code> (Mobile); <code>H2</code>: <code>32px</code> dengan aksen warna utama; <code>H3</code>: <code>21px</code>.</li>
+        <li><strong>Font Body &amp; Deskripsi:</strong> <code>Open Sans</code> atau <code>PT Sans</code> (Regular <code>400</code>, <code>15px</code>, <em>line-height</em> <code>1.65</code>).</li>
+        <li><strong>Font Teknis (Opsional):</strong> <code>JetBrains Mono</code> atau <code>Consolas</code> (<code>13px</code>) untuk <em>badge tech stack</em> pada kartu portfolio.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Spesifikasi Fungsional Per Section</h2>
+
+      <h3>Section 1: Home (<code>#home</code>)</h3>
+      <ul>
+        <li><strong>Tata Letak:</strong> Teks rata tengah (<em>centered vertically &amp; horizontally</em>) di atas latar gelap dengan efek <em>subtle geometric/particle overlay</em>.</li>
+        <li><strong>Komponen:</strong> Nama Lengkap (<code>H1</code>) dan <strong>Text Rotator</strong> (animasi pergantian peran setiap 3 detik, misalnya: <em>Full-Stack Web Developer</em>, <em>Manufacturing &amp; PPIC System Specialist</em>, <em>Database &amp; Linux Server Admin</em>).</li>
+      </ul>
+
+      <h3>Section 2: About Me (<code>#about-me</code>)</h3>
+      <ul>
+        <li><strong>Profil &amp; Biodata (2 Kolom):</strong> Kolom kiri (60%) berisi ringkasan eksekutif pengalaman membangun sistem informasi perusahaan; Kolom kanan (40%) berisi daftar <em>key-value</em> beraksen (Domisili, Status Ketersediaan, Email, Telepon/WhatsApp).</li>
+        <li><strong>What I Do (Grid 2×2):</strong> 4 kartu layanan inti dengan <em>line icon</em>: (1) <em>Enterprise Web Applications</em>, (2) <em>Manufacturing &amp; PPIC Systems</em>, (3) <em>Real-Time Monitoring &amp; Automation</em>, (4) <em>Database Architecture &amp; Server Deployment</em>.</li>
+        <li><strong>Fun Facts / Statistik (Grid 3 Kolom):</strong> Kartu metrik pencapaian (Sistem Terdeploy, Tahun Pengalaman IT, Proyek Selesai).</li>
+      </ul>
+      <div class="callout">
+        <strong>Catatan Desain:</strong> Komponen <em>Testimonials</em>, <em>Clients Logo</em>, dan <em>Pricing Plans</em> pada template bawaan bersifat opsional dan dapat dinonaktifkan (<code>display: none</code>) jika fokus utama website adalah lamaran kerja profesional.
+      </div>
+
+      <h3>Section 3: Resume (<code>#resume</code>)</h3>
+      <ul>
+        <li><strong>Kolom Kiri (60% — Timeline &amp; Kredensial):</strong> <em>Experience Timeline</em> (tahun, perusahaan, jabatan, pencapaian teknis), <em>Education Timeline</em>, dan <em>Certificates</em> (grid 2 kolom berisi institusi, nama sertifikat, tanggal terbit, dan ID kredensial).</li>
+        <li><strong>Kolom Kanan (40% — Skills &amp; Domain Knowledge):</strong> <em>Skill Progress Bars</em> (Backend &amp; Database, Frontend &amp; Infrastructure) dan <em>Knowledges Tag Cloud</em> (PPIC, WIP Tracking, Standard Cycle Time, ERD Design, REST API, Nginx Reverse Proxy).</li>
+      </ul>
+
+      <h3>Section 4: Portfolio (<code>#portfolio</code>)</h3>
+      <ul>
+        <li><strong>Filter Kategori:</strong> Tombol filter interaktif (<em>All</em>, <em>Enterprise &amp; PPIC</em>, <em>Web Applications</em>, <em>Automation &amp; IoT</em>) berbasis <em>Shuffle.js</em>.</li>
+        <li><strong>Grid Proyek (2 atau 3 Kolom):</strong> Kartu dengan <em>thumbnail</em> rasio <code>4:3</code>, judul proyek, kategori, dan efek <em>overlay</em> saat di-<em>hover</em>.</li>
+        <li><strong>Modal Detail Studi Kasus:</strong> Pop-up (<em>Magnific Popup</em>) berisi <em>carousel screenshot</em>, deskripsi masalah &amp; solusi bisnis, daftar <em>Tech Stack</em>, tanggal pengerjaan, serta tautan ke <em>Live Demo</em> atau <em>Repository GitHub</em>.</li>
+      </ul>
+
+      <h3>Section 5: Blog / Technical Notes (<code>#blog</code>) — Opsional</h3>
+      <ul>
+        <li>Grid 2 kolom berisi kartu artikel atau catatan studi kasus teknis (thumbnail, kategori, tanggal, judul). Dapat disembunyikan jika belum digunakan.</li>
+      </ul>
+
+      <h3>Section 6: Contact (<code>#contact</code>)</h3>
+      <ul>
+        <li><strong>Kolom Kiri (35%):</strong> 4 kartu informasi vertikal dengan ikon (Kota/Domisili, Telepon/WhatsApp, Email, Status <em>Open to Work / Freelance</em>).</li>
+        <li><strong>Kolom Kanan (65%):</strong> Form kontak interaktif (<em>Full Name</em>, <em>Email Address</em>, <em>Subject</em>, <em>Message</em>) dengan validasi input, proteksi spam, dan notifikasi AJAX tanpa <em>reload</em> halaman.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Persyaratan Teknis &amp; Performa (Non-Functional Requirements)</h2>
+      <ol>
+        <li><strong>Responsivitas (Mobile-First Compatibility):</strong> Proporsional pada ukuran <code>360px</code> (Mobile), <code>768px</code> (Tablet), dan <code>1440px+</code> (Desktop) dengan <em>slide-out drawer menu</em> di perangkat mobile.</li>
+        <li><strong>Kecepatan Muat (Performance):</strong> Seluruh gambar dikompresi ke format <code>WebP</code> atau <code>JPG</code> teroptimasi (&lt; 200 KB per gambar) dengan target skor Google Lighthouse Performance <code>&gt;= 90</code>.</li>
+        <li><strong>Arsitektur Hosting &amp; Deployment:</strong> Dibangun sebagai <em>static frontend</em> (HTML5, CSS3, JS/jQuery) untuk deployment di GitHub Pages, Vercel, Netlify, atau Nginx. Form kontak menggunakan API pihak ketiga (Web3Forms / Formspree) menggantikan skrip PHP bawaan.</li>
+        <li><strong>SEO &amp; Metadata:</strong> Dilengkapi tag <code>&lt;title&gt;</code>, <code>&lt;meta name="description"&gt;</code>, serta <em>Open Graph tags</em> (<code>og:title</code>, <code>og:image</code>, <code>og:description</code>).</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>5. Kriteria Penerimaan (Acceptance Criteria)</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" /> <span>Navigasi hash (<code>#home</code> s/d <code>#contact</code>) berfungsi mulus di desktop maupun mobile tanpa <em>broken link</em>.</span></li>
+        <li><input type="checkbox" /> <span>Tombol <strong>Download CV</strong> mengunduh file PDF terbaru dengan nama file yang rapi (contoh: <code>CV_NamaAnda_FullStackDeveloper.pdf</code>).</span></li>
+        <li><input type="checkbox" /> <span>Filter kategori pada halaman <strong>Portfolio</strong> menyaring kartu proyek dengan animasi halus dan modal detail menampilkan informasi lengkap.</span></li>
+        <li><input type="checkbox" /> <span>Form <strong>Contact</strong> berhasil mengirimkan pesan uji coba ke email tujuan dan menampilkan pesan konfirmasi.</span></li>
+        <li><input type="checkbox" /> <span>Tidak ada teks <em>placeholder</em> ("Lorem ipsum", "Alex Smith", atau gambar bawaan template) yang tertinggal di seluruh halaman.</span></li>
+      </ul>
+    </section>
+
+    <footer>
+      Dokumen Spesifikasi Produk (PRD) — Template Desain BreezyCV Dark Full-Width
+    </footer>
+  </div>
+</body>
+</html>
