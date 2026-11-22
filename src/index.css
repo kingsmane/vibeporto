@@ -276,3 +276,8 @@
 .icon-thin {
   font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 40;
 }
+
+main .grid > *,
+main .flex > * {
+  min-width: 0;
+}

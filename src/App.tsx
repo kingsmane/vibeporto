@@ -40,6 +40,59 @@ const NAV_ITEMS: { id: NavSectionId; label: string; icon: string }[] = [
   { id: "contact", label: "Contact", icon: "mail" },
 ];
 
+const NAV_ICON_PATHS: Record<NavSectionId, string[]> = {
+  home: [
+    "M6 32 L32 8 L58 32",
+    "M46 21 V12 H52 V26",
+    "M14 28 V55 H27 V40 H37 V55 H50 V28",
+  ],
+  "about-me": [
+    "M32 8 a11 11 0 1 0 0.01 0 Z",
+    "M10 55 C10 44 20 38 32 38 C44 38 54 44 54 55 Z",
+  ],
+  resume: [
+    "M32 14 L60 26 L32 38 L4 26 Z",
+    "M16 33 V44 C22 51 42 51 48 44 V33",
+    "M56 28 V44",
+    "M54 44 H58 V51 H54 Z",
+  ],
+  portfolio: [
+    "M6 20 H58 V54 H6 Z",
+    "M24 20 V13 H40 V20",
+    "M6 38 H26 M38 38 H58",
+    "M26 34 H38 V42 H26 Z",
+  ],
+  blog: [
+    "M14 52 V10 Q14 6 18 6 H50 V48 H18 Q14 48 14 52 Z",
+    "M18 48 Q14 48 14 52 Q14 58 18 58 H50 V48",
+  ],
+  contact: [
+    "M4 14 H60 V50 H4 Z",
+    "M4 16 L32 38 L60 16",
+    "M4 48 L24 30 M60 48 L40 30",
+  ],
+};
+
+function NavIcon({ id, size }: { id: NavSectionId; size: number }) {
+  return (
+    <svg
+      viewBox="0 0 64 64"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      {NAV_ICON_PATHS[id].map((d) => (
+        <path key={d} d={d} />
+      ))}
+    </svg>
+  );
+}
+
 export default function App() {
   const [activeSection, setActiveSection] = useState<NavSectionId>("home");
   const [portfolioFilter, setPortfolioFilter] =
@@ -216,7 +269,7 @@ export default function App() {
       <div className="relative lg:flex lg:min-h-screen lg:items-center lg:justify-center">
         <div className="relative w-full lg:h-[min(760px,calc(100vh-4rem))] lg:w-[calc(100%-14rem)] lg:max-w-[1280px]">
           {/* Profile panel (left) */}
-          <aside className="relative z-0 flex flex-col items-center rounded-b-[28px] bg-[var(--sidebar-bg)] px-6 pb-8 pt-14 text-center text-white shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[420px] lg:rounded-[30px] lg:pb-6 lg:pl-0 lg:pr-[40px] lg:pt-[70px]">
+          <aside className={`${activeSection === "home" ? "flex" : "hidden lg:flex"} relative z-0 flex-col items-center rounded-b-[28px] bg-[var(--sidebar-bg)] px-6 pb-8 pt-14 text-center text-white shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[420px] lg:rounded-[30px] lg:pb-6 lg:pl-0 lg:pr-[40px] lg:pt-[70px]`}>
             <div className="relative lg:w-[380px] lg:pl-0">
               <div className="relative mx-auto h-[170px] w-[170px]">
                 <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-[3px] border-white bg-white">
@@ -294,13 +347,13 @@ export default function App() {
 
           {/* Content panel (right) */}
           <main
-            className="relative z-10 mx-3 mt-4 rounded-[28px] bg-surface-base shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:right-0 lg:m-0 lg:w-[calc(100%-380px)] lg:rounded-[30px]"
+            className={`${activeSection === "home" ? "mt-4" : "mt-16"} relative z-10 mx-3 rounded-[28px] bg-surface-base shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:right-0 lg:m-0 lg:w-[calc(100%-380px)] lg:rounded-[30px]`}
           >
             <div
               ref={contentRef}
               className="px-5 pb-28 pt-8 sm:px-8 lg:h-full lg:overflow-y-auto lg:px-12 lg:pb-12 lg:pt-12"
             >
-              <div className="mx-auto w-full max-w-5xl space-y-12">
+              <div className="@container mx-auto w-full max-w-5xl space-y-12 break-words">
                 {/* HOME */}
                 {activeSection === "home" && (
                   <section
@@ -360,7 +413,7 @@ export default function App() {
               <div className="page-enter space-y-12">
               <section className="relative" id="about-me">
                 <div className="flex items-center gap-space-sm mb-space-lg">
-                  <span className="material-symbols-outlined text-primary text-[28px]">
+                  <span className="material-symbols-outlined hidden shrink-0 text-primary text-[28px] @xl:inline-block">
                     badge
                   </span>
                   <h3 className="font-headline-lg text-headline-lg text-text-primary">
@@ -369,9 +422,9 @@ export default function App() {
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-border-subtle to-transparent ml-4" />
                 </div>
 
-                <div className="grid grid-cols-12 gap-space-lg">
+                <div className="grid grid-cols-1 @3xl:grid-cols-12 gap-space-lg">
                   {/* Left: Executive Summary & 2-Column Metadata */}
-                  <div className="col-span-12 lg:col-span-7 flex flex-col justify-between bg-surface-base p-space-lg rounded-xl border border-border-subtle shadow-md">
+                  <div className="@3xl:col-span-7 flex flex-col justify-between bg-surface-base p-space-lg rounded-xl border border-border-subtle shadow-md">
                     <div className="space-y-space-md">
                       <div className="inline-flex items-center gap-2 text-primary font-label-md text-label-md uppercase tracking-wider">
                         <span className="material-symbols-outlined text-[16px]">
@@ -398,7 +451,7 @@ export default function App() {
                     </div>
 
                     {/* Metadata 2-Column Info Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md mt-space-lg pt-space-md border-t border-border-subtle">
+                    <div className="grid grid-cols-1 @xl:grid-cols-2 gap-space-md mt-space-lg pt-space-md border-t border-border-subtle">
                       <div className="flex flex-col">
                         <span className="font-label-sm text-label-sm text-text-muted uppercase tracking-wider">
                           Domisili
@@ -435,7 +488,7 @@ export default function App() {
                   </div>
 
                   {/* Right: 3 Metric Cards */}
-                  <div className="col-span-12 lg:col-span-5 flex flex-col gap-space-md">
+                  <div className="@3xl:col-span-5 flex flex-col gap-space-md">
                     <div className="flex-1 bg-surface-card p-space-lg rounded-xl border border-border-subtle hover:border-primary/50 transition-all flex items-center gap-space-md group">
                       <div className="w-16 h-16 rounded-xl bg-surface-elevated flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
                         <span className="material-symbols-outlined text-[32px]">
@@ -507,13 +560,13 @@ export default function App() {
                       Layanan &amp; Keahlian Inti
                     </h3>
                   </div>
-                  <p className="font-body-md text-body-md text-text-muted max-w-md text-right hidden sm:block">
+                  <p className="font-body-md text-body-md text-text-muted max-w-md text-right hidden @xl:block">
                     Solusi terintegrasi menggabungkan software modern dengan
                     kebutuhan nyata shop floor manufaktur.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+                <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-space-lg">
                   {SERVICES_DATA.map((service) => (
                     <div
                       key={service.id}
@@ -553,7 +606,7 @@ export default function App() {
               {activeSection === "resume" && (
               <section className="page-enter relative" id="resume">
                 <div className="flex items-center gap-space-sm mb-space-lg">
-                  <span className="material-symbols-outlined text-primary text-[28px]">
+                  <span className="material-symbols-outlined hidden shrink-0 text-primary text-[28px] @xl:inline-block">
                     work_history
                   </span>
                   <h3 className="font-headline-lg text-headline-lg text-text-primary">
@@ -562,10 +615,10 @@ export default function App() {
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-border-subtle to-transparent ml-4" />
                 </div>
 
-                <div className="grid grid-cols-12 gap-space-xl">
+                <div className="grid grid-cols-1 @3xl:grid-cols-12 gap-space-xl">
                   {/* Left Column: Timeline & Credentials */}
-                  <div className="col-span-12 lg:col-span-7 flex flex-col">
-                    <div className="flex items-center justify-between mb-space-md">
+                  <div className="@3xl:col-span-7 flex flex-col">
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-space-md">
                       <h4 className="font-headline-md text-headline-md text-text-primary flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary text-[20px]">
                           business_center
@@ -670,7 +723,7 @@ export default function App() {
                         </span>
                         <span>Sertifikasi Profesional</span>
                       </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+                      <div className="grid grid-cols-1 @xl:grid-cols-2 gap-space-sm">
                         {CERTIFICATES_DATA.slice(0, 2).map((cert) => (
                           <div
                             key={cert.id}
@@ -697,7 +750,7 @@ export default function App() {
                   </div>
 
                   {/* Right Column: Skills Progress Bars & Domain Tag Cloud */}
-                  <div className="col-span-12 lg:col-span-5 flex flex-col space-y-space-lg">
+                  <div className="@3xl:col-span-5 flex flex-col space-y-space-lg">
                     <div>
                       <h4 className="font-headline-md text-headline-md text-text-primary mb-space-md flex items-center gap-2">
                         <span className="material-symbols-outlined text-secondary text-[20px]">
@@ -760,7 +813,7 @@ export default function App() {
               {/* SECTION 4: KARYA REKAYASA & STUDI KASUS (#portfolio) */}
               {activeSection === "portfolio" && (
               <section className="page-enter relative" id="portfolio">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
+                <div className="flex flex-col @2xl:flex-row @2xl:items-end justify-between gap-space-md mb-space-lg">
                   <div>
                     <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">
                       Portofolio Pilihan
@@ -771,7 +824,7 @@ export default function App() {
                   </div>
 
                   {/* Interactive Filter Tabs */}
-                  <div className="flex items-center gap-2 p-1 bg-surface-card rounded-full border border-border-subtle self-start md:self-auto overflow-x-auto">
+                  <div className="flex max-w-full flex-wrap items-center gap-1 p-1 bg-surface-card rounded-3xl border border-border-subtle self-start">
                     {[
                       { id: "all" as const, label: "Semua" },
                       {
@@ -787,7 +840,7 @@ export default function App() {
                           key={tab.id}
                           type="button"
                           onClick={() => setPortfolioFilter(tab.id)}
-                          className={`px-4 py-1.5 rounded-full text-label-sm font-label-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
+                          className={`px-4 py-1.5 rounded-full text-label-sm font-label-md transition-all cursor-pointer whitespace-nowrap ${
                             active
                               ? "bg-primary-container text-surface-base shadow-[0_0_12px_rgba(4,180,224,0.3)]"
                               : "text-text-muted hover:text-text-primary"
@@ -801,7 +854,7 @@ export default function App() {
                 </div>
 
                 {/* 3-Column Project Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+                <div className="grid grid-cols-1 @2xl:grid-cols-2 @4xl:grid-cols-3 gap-space-lg">
                   {filteredProjects.map((project) => (
                     <div
                       key={project.id}
@@ -857,7 +910,7 @@ export default function App() {
               <section className="page-enter relative" id="blog">
                 <div className="flex items-center justify-between mb-space-lg">
                   <div className="flex items-center gap-space-sm flex-1">
-                    <span className="material-symbols-outlined text-primary text-[28px]">
+                    <span className="material-symbols-outlined hidden shrink-0 text-primary text-[28px] @xl:inline-block">
                       article
                     </span>
                     <h3 className="font-headline-lg text-headline-lg text-text-primary">
@@ -867,7 +920,7 @@ export default function App() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+                <div className="grid grid-cols-1 @2xl:grid-cols-2 gap-space-lg">
                   {TECHNICAL_NOTES_DATA.map((note) => (
                     <article
                       key={note.id}
@@ -875,7 +928,7 @@ export default function App() {
                       className="bg-surface-card p-space-lg rounded-xl border border-border-subtle hover:border-primary/60 transition-all group cursor-pointer flex flex-col justify-between"
                     >
                       <div>
-                        <div className="flex items-center gap-2 text-xs font-mono text-primary mb-2">
+                        <div className="flex flex-wrap items-center gap-x-2 text-xs font-mono text-primary mb-2">
                           <span>{note.category}</span>
                           <span className="text-text-muted">·</span>
                           <span className="text-text-muted">{note.date}</span>
@@ -892,11 +945,11 @@ export default function App() {
                         </p>
                       </div>
 
-                      <div className="flex items-center justify-between pt-3 border-t border-border-subtle/60">
-                        <div className="flex items-center gap-2 text-xs font-mono text-text-muted">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-border-subtle/60">
+                        <div className="flex flex-wrap items-center gap-x-2 text-xs font-mono text-text-muted">
                           {note.tags.slice(0, 3).map((t, i) => (
                             <React.Fragment key={t}>
-                              <span>{t}</span>
+                              <span className="whitespace-nowrap">{t}</span>
                               {i < 2 && <span>·</span>}
                             </React.Fragment>
                           ))}
@@ -918,7 +971,7 @@ export default function App() {
               {activeSection === "contact" && (
               <section className="page-enter relative" id="contact">
                 <div className="flex items-center gap-space-sm mb-space-lg">
-                  <span className="material-symbols-outlined text-primary text-[28px]">
+                  <span className="material-symbols-outlined hidden shrink-0 text-primary text-[28px] @xl:inline-block">
                     contact_mail
                   </span>
                   <h3 className="font-headline-lg text-headline-lg text-text-primary">
@@ -927,9 +980,9 @@ export default function App() {
                   <div className="h-[1px] flex-1 bg-gradient-to-r from-border-subtle to-transparent ml-4" />
                 </div>
 
-                <div className="grid grid-cols-12 gap-space-xl">
+                <div className="grid grid-cols-1 @3xl:grid-cols-12 gap-space-xl">
                   {/* Left: Quick Info Cards */}
-                  <div className="col-span-12 lg:col-span-5 flex flex-col justify-between space-y-space-md">
+                  <div className="@3xl:col-span-5 flex flex-col justify-between space-y-space-md">
                     <div className="space-y-space-md">
                       <p className="font-body-lg text-body-lg text-text-secondary leading-relaxed">
                         Tertarik mendiskusikan kebutuhan arsitektur sistem
@@ -998,7 +1051,7 @@ export default function App() {
                     </div>
 
                     <div className="p-space-md rounded-xl bg-surface-card/60 border border-primary-container/20 flex items-center gap-3">
-                      <span className="material-symbols-outlined text-primary text-[28px]">
+                      <span className="material-symbols-outlined hidden shrink-0 text-primary text-[28px] @xl:inline-block">
                         schedule
                       </span>
                       <div className="font-body-sm text-body-sm text-text-muted">
@@ -1010,12 +1063,12 @@ export default function App() {
                   </div>
 
                   {/* Right: Interactive Contact Form */}
-                  <div className="col-span-12 lg:col-span-7 bg-surface-card p-space-xl rounded-xl border border-border-subtle shadow-xl">
+                  <div className="@3xl:col-span-7 bg-surface-card p-space-xl rounded-xl border border-border-subtle shadow-xl">
                     <form
                       className="space-y-space-md"
                       onSubmit={handleContactSubmit}
                     >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+                      <div className="grid grid-cols-1 @xl:grid-cols-2 gap-space-md">
                         <div className="space-y-1.5">
                           <label
                             className="font-label-md text-label-md text-text-secondary block"
@@ -1116,7 +1169,7 @@ export default function App() {
                       </button>
 
                       {formSubmitted && (
-                        <div className="p-3.5 rounded-lg bg-primary-container/10 border border-primary-container/30 text-primary font-label-md text-label-md flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div className="p-3.5 rounded-lg bg-primary-container/10 border border-primary-container/30 text-primary font-label-md text-label-md flex flex-col @xl:flex-row @xl:items-center justify-between gap-2">
                           <span>
                             Terima kasih, <strong>{formName}</strong>! Pesan
                             mengenai &ldquo;
@@ -1167,9 +1220,7 @@ export default function App() {
                       : "text-text-muted hover:text-[#04b4e0]"
                   }`}
                 >
-                  <span className="material-symbols-outlined icon-thin text-[32px]">
-                    {item.icon}
-                  </span>
+                  <NavIcon id={item.id} size={34} />
                   <span className="pointer-events-none absolute right-[76px] origin-right scale-0 whitespace-nowrap rounded-full bg-[var(--nav-bg)] px-3 py-1 text-[12px] font-medium text-text-primary shadow-lg transition-transform group-hover:scale-100">
                     {item.label}
                   </span>
@@ -1225,9 +1276,7 @@ export default function App() {
                 isActive ? "text-[#04b4e0]" : "text-text-muted"
               }`}
             >
-              <span className="material-symbols-outlined icon-thin text-[28px]">
-                {item.icon}
-              </span>
+              <NavIcon id={item.id} size={28} />
             </a>
           );
         })}
