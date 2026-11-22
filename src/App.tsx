@@ -29,7 +29,7 @@ type NavSectionId =
   | "portfolio"
   | "blog"
   | "contact";
-type PortfolioCategory = "all" | "manufacturing" | "web" | "iot";
+type PortfolioCategory = "all" | "manufacturing" | "web";
 
 const NAV_ITEMS: { id: NavSectionId; label: string; icon: string }[] = [
   { id: "home", label: "Home", icon: "home" },
@@ -182,7 +182,7 @@ export default function App() {
   const handleInquireProject = (projectTitle: string) => {
     setFormSubject(`Diskusi Proyek: ${projectTitle}`);
     setFormMessage(
-      `Halo Arga, saya tertarik mendiskusikan implementasi sistem serupa dengan "${projectTitle}" untuk kebutuhan perusahaan kami.`,
+      `Halo Herman, saya tertarik mendiskusikan implementasi sistem serupa dengan "${projectTitle}" untuk kebutuhan perusahaan kami.`,
     );
     setFormSubmitted(false);
     navigateToSection("contact");
@@ -306,7 +306,9 @@ export default function App() {
                     href: PROFILE_DATA.whatsappUrl,
                     icon: "chat",
                   },
-                ].map((s) => (
+                ]
+                  .filter((s) => s.href)
+                  .map((s) => (
                   <a
                     key={s.label}
                     aria-label={s.label}
@@ -433,20 +435,22 @@ export default function App() {
                         <span>Ringkasan Eksekutif</span>
                       </div>
                       <p className="font-body-lg text-body-lg text-text-secondary leading-relaxed">
-                        Profesional rekayasa perangkat lunak dengan pengalaman{" "}
-                        <strong className="text-text-primary">8+ tahun</strong>{" "}
-                        memimpin transformasi digital sektor manufaktur, otomasi
-                        pabrik, dan sistem enterprise terdistribusi. Berfokus
-                        pada digitalisasi lini produksi shop-floor, sistem PPIC
-                        terintegrasi, pelacakan WIP real-time, reduksi cycle
-                        time, hingga implementasi telemetri OEE industri.
+                        Full-Stack Developer yang membangun aplikasi web end-to-end,
+                        mulai dari perancangan arsitektur dan basis data,
+                        pengembangan API di backend, hingga antarmuka yang
+                        responsif dan mudah dipakai. Terbiasa menangani sistem
+                        skala enterprise seperti{" "}
+                        <strong className="text-text-primary">
+                          ERP, HRIS, monitoring produksi, dan sistem berbasis
+                          role/permission
+                        </strong>
+                        .
                       </p>
                       <p className="font-body-md text-body-md text-text-muted leading-relaxed">
-                        Menguasai arsitektur backend berkinerja tinggi,
-                        perancangan ERD kompleks berkecepatan tinggi, container
-                        orchestration Docker, serta hardening infrastruktur
-                        Linux Server dengan reliabilitas tinggi untuk
-                        operasional 24/7 tanpa henti.
+                        Menguasai PHP (Laravel / CodeIgniter), Node.js (Express), React,
+                        serta basis data relasional PostgreSQL dan MySQL.
+                        Mampu menerjemahkan kebutuhan bisnis menjadi solusi
+                        teknis yang andal, terukur, dan mudah dirawat.
                       </p>
                     </div>
 
@@ -497,13 +501,13 @@ export default function App() {
                       </div>
                       <div>
                         <div className="font-display-hero text-headline-lg font-extrabold text-text-primary tabular-nums">
-                          14+
+                          4 Plant
                         </div>
                         <div className="font-headline-sm text-headline-sm text-text-secondary mt-0.5">
-                          Sistem ERP &amp; Manufaktur
+                          ERP Terintegrasi
                         </div>
                         <div className="font-body-sm text-body-sm text-text-muted">
-                          Digitalisasi proses hulu ke hilir
+                          Arsitektur ERP di 4 plant produksi
                         </div>
                       </div>
                     </div>
@@ -516,13 +520,13 @@ export default function App() {
                       </div>
                       <div>
                         <div className="font-display-hero text-headline-lg font-extrabold text-text-primary tabular-nums">
-                          8+ Tahun
+                          2021+
                         </div>
                         <div className="font-headline-sm text-headline-sm text-text-secondary mt-0.5">
-                          Pengalaman Praktikal
+                          Full-Stack Developer
                         </div>
                         <div className="font-body-sm text-body-sm text-text-muted">
-                          Desain sistem &amp; kepemimpinan tim
+                          HRIS, workflow approval, ERP
                         </div>
                       </div>
                     </div>
@@ -538,10 +542,10 @@ export default function App() {
                           99.8%
                         </div>
                         <div className="font-headline-sm text-headline-sm text-text-secondary mt-0.5">
-                          Uptime Layanan Kritis
+                          Uptime Sistem ERP
                         </div>
                         <div className="font-body-sm text-body-sm text-text-muted">
-                          Infrastruktur produksi bebas hambatan
+                          Ketersediaan sistem produksi
                         </div>
                       </div>
                     </div>
@@ -705,18 +709,21 @@ export default function App() {
                               </span>
                             </div>
                             <div className="text-xs text-secondary font-medium mt-0.5">
-                              {edu.institution} · {edu.gpa}
+                              {edu.institution}{edu.gpa ? ` · ${edu.gpa}` : ""}
                             </div>
-                            <p className="text-body-sm text-text-muted mt-1">
-                              {edu.focus}
-                            </p>
+                            {edu.focus && (
+                              <p className="text-body-sm text-text-muted mt-1">
+                                {edu.focus}
+                              </p>
+                            )}
                           </div>
                         ))}
                       </div>
                     )}
 
                     {/* Sertifikasi Profesional Section Below Timeline */}
-                    <div className="mt-space-lg pt-space-md border-t border-border-subtle">
+                    {CERTIFICATES_DATA.length > 0 && (
+<div className="mt-space-lg pt-space-md border-t border-border-subtle">
                       <h4 className="font-headline-sm text-headline-sm text-text-primary mb-space-sm flex items-center gap-2">
                         <span className="material-symbols-outlined text-primary text-[20px]">
                           verified
@@ -747,6 +754,7 @@ export default function App() {
                         ))}
                       </div>
                     </div>
+)}
                   </div>
 
                   {/* Right Column: Skills Progress Bars & Domain Tag Cloud */}
@@ -832,8 +840,7 @@ export default function App() {
                         label: "Enterprise & PPIC",
                       },
                       { id: "web" as const, label: "Web Applications" },
-                      { id: "iot" as const, label: "Otomasi & IoT" },
-                    ].map((tab) => {
+                                          ].map((tab) => {
                       const active = portfolioFilter === tab.id;
                       return (
                         <button

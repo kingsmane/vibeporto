@@ -21,12 +21,12 @@ function escapePdfText(text: string): string {
 
 /**
  * Generates a valid, multi-section standard PDF binary (PDF-1.4) in memory
- * and triggers an instant browser download as `CV_ArgaPratama_FullStackDeveloper.pdf`.
+ * and triggers an instant browser download as `CV_HermanSadi_FullStackDeveloper.pdf`.
  */
 export function downloadCompleteCvPdf(): void {
   const lines: { text: string; size: number; bold?: boolean; indent?: number; gapBefore?: number }[] = [
-    { text: 'ARGA PRATAMA, S.KOM.', size: 16, bold: true },
-    { text: 'Full-Stack Developer & Manufacturing IT Specialist', size: 11, bold: true, gapBefore: 4 },
+    { text: 'HERMAN SADI', size: 16, bold: true },
+    { text: PROFILE_DATA.title, size: 11, bold: true, gapBefore: 4 },
     {
       text: `Domisili: ${PROFILE_DATA.location}  |  Email: ${PROFILE_DATA.email}  |  Telp/WA: ${PROFILE_DATA.phone}`,
       size: 9,
@@ -39,20 +39,24 @@ export function downloadCompleteCvPdf(): void {
     },
     { text: 'RINGKASAN EKSEKUTIF', size: 11, bold: true, gapBefore: 8 },
     {
-      text: 'Profesional rekayasa perangkat lunak dengan pengalaman 8+ tahun memimpin transformasi digital sektor',
+      text: 'Full-Stack Developer yang membangun aplikasi web end-to-end, mulai dari perancangan arsitektur dan',
       size: 9.5,
       gapBefore: 4,
     },
     {
-      text: 'manufaktur, otomasi pabrik, dan sistem enterprise terdistribusi. Berfokus pada digitalisasi lini produksi',
+      text: 'basis data, pengembangan API di backend, hingga antarmuka yang responsif dan mudah dipakai.',
       size: 9.5,
     },
     {
-      text: 'shop-floor, sistem PPIC terintegrasi, pelacakan WIP real-time, reduksi cycle time, hingga implementasi',
+      text: 'Menguasai PHP (Laravel / CodeIgniter), Node.js (Express), React, serta basis data PostgreSQL dan MySQL.',
       size: 9.5,
     },
     {
-      text: 'telemetri OEE industri, arsitektur database PostgreSQL skala besar, Docker, dan Linux Server 24/7.',
+      text: 'Terbiasa menangani sistem skala enterprise: ERP, HRIS, monitoring produksi, dan sistem berbasis',
+      size: 9.5,
+    },
+    {
+      text: 'role/permission. Mampu menerjemahkan kebutuhan bisnis menjadi solusi teknis yang andal dan mudah dirawat.',
       size: 9.5,
     },
     { text: 'RIWAYAT PENGALAMAN KERJA', size: 11, bold: true, gapBefore: 12 },
@@ -88,6 +92,8 @@ export function downloadCompleteCvPdf(): void {
     });
   });
 
+  lines.push({ text: '* Database (MySQL & PostgreSQL)', size: 9, indent: 8 });
+
   lines.push({ text: 'PROYEK UNGGULAN & STUDI KASUS', size: 11, bold: true, gapBefore: 12 });
   PORTFOLIO_PROJECTS.forEach((proj) => {
     lines.push({
@@ -106,7 +112,7 @@ export function downloadCompleteCvPdf(): void {
   lines.push({ text: 'PENDIDIKAN & SERTIFIKASI PROFESIONAL', size: 11, bold: true, gapBefore: 12 });
   EDUCATION_DATA.forEach((edu) => {
     lines.push({
-      text: `${edu.degree} - ${edu.institution} (${edu.period}) | ${edu.gpa}`,
+      text: `${edu.degree} - ${edu.institution} (${edu.period})${edu.gpa ? ` | ${edu.gpa}` : ''}`,
       size: 9.2,
       bold: true,
       gapBefore: 4,

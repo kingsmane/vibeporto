@@ -1,7 +1,7 @@
 export interface ProjectCaseStudy {
   id: string;
   title: string;
-  category: 'manufacturing' | 'web' | 'iot';
+  category: 'manufacturing' | 'web';
   categoryLabel: string;
   categoryColor: 'primary' | 'secondary';
   shortDescription: string;
@@ -41,8 +41,8 @@ export interface EducationItem {
   degree: string;
   period: string;
   institution: string;
-  gpa: string;
-  focus: string;
+  gpa?: string;
+  focus?: string;
 }
 
 export interface CertificateItem {
@@ -72,31 +72,31 @@ export interface TechnicalNoteItem {
 
 export const PROFILE_DATA = {
   name: 'Herman Sadi',
-  title: 'Full-Stack Developer & Manufacturing IT Specialist',
+  title: 'Full-Stack Developer',
   statusText: 'Tersedia untuk Peluang Penuh & Konsultasi IT (Open to Work)',
-  headerStatus: 'Available for MES & Full-Stack Projects',
+  headerStatus: 'Available for ERP & Full-Stack Projects',
   heroKicker: 'Portofolio Profesional Herman Sadi',
   rotatingRoles: [
     'Full-Stack Web Developer',
-    'Manufacturing & PPIC System Specialist',
-    'Database & Linux Server Admin',
-    'High-Availability Architecture Engineer',
+    'ERP & Manufacturing System Developer',
+    'HRIS & Workflow Approval Developer',
+    'Database (MySQL & PostgreSQL) Specialist',
   ],
   heroBadges: [
     { icon: 'code', label: 'Full-Stack Developer', filterTarget: 'web' as const },
-    { icon: 'precision_manufacturing', label: 'Manufacturing & PPIC Specialist', filterTarget: 'manufacturing' as const },
-    { icon: 'dns', label: 'Database & Linux Server Admin', filterTarget: 'all' as const },
-    { icon: 'network_check', label: 'High-Availability Architecture', filterTarget: 'iot' as const },
+    { icon: 'precision_manufacturing', label: 'ERP & Manufacturing Systems', filterTarget: 'manufacturing' as const },
+    { icon: 'groups', label: 'HRIS & Workflow Approval', filterTarget: 'web' as const },
+    { icon: 'dns', label: 'Database & Linux Server', filterTarget: 'all' as const },
   ],
   location: 'Indonesia (Remote / On-Site)',
-  experienceYears: '8+ Tahun Manufaktur & IT',
+  experienceYears: 'Sejak 2021 (Full-Stack Developer)',
   availability: 'Rekrutmen & Konsultasi',
-  email: 'kontak@portfolio-tech.id',
-  phone: '+62 812-3456-7890',
-  whatsappUrl: 'https://wa.me/6281234567890',
-  githubUrl: 'https://github.com/argapratama-dev',
-  linkedinUrl: 'https://linkedin.com/in/arga-pratama-skom',
-  cvFileName: 'CV_ArgaPratama_FullStackDeveloper.pdf',
+  email: 'herman.sadi@gmail.com',
+  phone: '+62 812-89540814',
+  whatsappUrl: 'https://wa.me/6281289540814',
+  githubUrl: '',
+  linkedinUrl: '',
+  cvFileName: 'CV_HermanSadi_FullStackDeveloper.pdf',
   copyrightYear: '2026',
 };
 
@@ -106,151 +106,122 @@ export const SERVICES_DATA = [
     icon: 'terminal',
     title: 'Enterprise Web Applications',
     description:
-      'Arsitektur modular, microservices, dan RESTful API high performance menggunakan framework modern. Mengutamakan performa loading cepat, data validation ketat, dan keamanan level enterprise.',
-    tags: ['Laravel', 'Node.js', 'REST API High-Throughput', 'Vue.js'],
+      'Perancangan arsitektur, pengembangan API di backend, hingga antarmuka yang responsif dan mudah dipakai, dengan logika bisnis kompleks dan sistem berbasis role/permission.',
+    tags: ['Laravel', 'CodeIgniter', 'Node.js / Express', 'React.js', 'RESTful API'],
   },
   {
-    id: 'manufacturing-ppic',
+    id: 'manufacturing-erp',
     icon: 'precision_manufacturing',
-    title: 'Manufacturing & PPIC Systems',
+    title: 'ERP & Manufacturing Systems',
     description:
-      'Digitalisasi lini produksi dari peramalan, Bill of Materials (BOM), pelacakan Work-in-Progress (WIP), perhitungan cycle time standar, hingga integrasi barcode/QR scanner di shop-floor.',
-    tags: ['BOM Management', 'Shop Floor Control', 'Cycle Time Reduction', 'Barcode Scanner'],
+      'Arsitektur ERP terintegrasi untuk beberapa plant produksi, pelacakan WIP real-time melalui integrasi sensor machine press, serta kebutuhan material produksi secara real-time.',
+    tags: ['ERP', 'WIP Real-Time Tracking', 'Sensor Machine Press', 'Material Planning'],
   },
   {
-    id: 'realtime-monitoring',
-    icon: 'monitoring',
-    title: 'Real-Time Monitoring & Automation',
+    id: 'hris-workflow',
+    icon: 'groups',
+    title: 'HRIS & Workflow Systems',
     description:
-      'Dashboard analitik OEE (Overall Equipment Effectiveness) dengan telemetri live, sistem alarm downtime mesin otomatis, dan integrasi logistik internal pabrik berbasis protokol MQTT & WebSocket.',
-    tags: ['OEE Analytics', 'IoT Telemetry', 'WebSocket Live Data', 'MQTT Protocol'],
+      'Human Resources Information System, workflow approval digital, tools management system, dan one gate system untuk kebutuhan operasional perusahaan.',
+    tags: ['HRIS', 'Workflow Approval Digital', 'Tools Management', 'One Gate System'],
   },
   {
     id: 'database-server',
     icon: 'database',
-    title: 'Database Architecture & Server Deployment',
+    title: 'Database & Server',
     description:
-      'Perancangan skema relasional kompleks (ERD), optimasi query jutaan row (PostgreSQL/MySQL), containerization Docker, serta konfigurasi reverse proxy Nginx dan pemeliharaan server Linux lokal.',
-    tags: ['PostgreSQL & MySQL', 'Docker & Swarm', 'Linux Server & Nginx', 'Query Index Tuning'],
+      'Desain skema dan optimasi query pada basis data relasional MySQL dan PostgreSQL, serta konfigurasi web server Nginx dan pemeliharaan server Linux Ubuntu.',
+    tags: ['MySQL', 'PostgreSQL', 'Nginx', 'Linux Ubuntu Server'],
   },
 ];
 
 export const EXPERIENCE_DATA: ExperienceItem[] = [
   {
     id: 'exp-1',
-    role: 'Lead Manufacturing Systems Engineer',
-    period: '2021 — Sekarang',
-    company: 'PT Industri Manufaktur Presisi Nasional',
+    role: 'Lead Project ERP',
+    period: '2025 — Sekarang',
+    company: 'PT GMSI',
     isCurrent: true,
     companyColor: 'primary',
     description:
-      'Memimpin tim beranggotakan 6 engineer untuk mengembangkan sistem PPIC, WIP Tracking, dan integrasi mesin sensor IoT. Mengurangi bottleneck inventaris WIP hingga 32% dan memangkas waktu input laporan harian sebesar 70%.',
+      'Memimpin proyek ERP (Enterprise Resource Planning) terintegrasi di 4 plant produksi dengan 99.8% uptime, termasuk pelacakan WIP real-time dan kebutuhan material produksi.',
     achievements: [
-      'Merancang ulang arsitektur MES (Manufacturing Execution System) terintegrasi di 4 plant produksi dengan 99.8% uptime.',
-      'Mengimplementasikan pelacakan WIP real-time menggunakan QR/Barcode terminal dan WebSocket di 45 work-center.',
-      'Menurunkan selisih stok material gudang-ke-lini produksi dari 4.8% menjadi di bawah 0.4% melalui validasi BOM multi-level.',
+      'Merancang ulang arsitektur ERP (Enterprise Resource Planning) terintegrasi di 4 plant produksi dengan 99.8% uptime.',
+      'Mengimplementasikan pelacakan WIP real-time menggunakan integrasi sensor machine press.',
+      'Realtime kebutuhan material produksi.',
     ],
-    techUsed: ['Laravel', 'Vue.js', 'PostgreSQL', 'MQTT', 'Docker', 'Nginx'],
+    techUsed: ['React.js', 'Express.js', 'PostgreSQL', 'Nginx'],
   },
   {
     id: 'exp-2',
     role: 'Senior Full-Stack Developer',
-    period: '2018 — 2021',
-    company: 'PT Integrasi Solusi Solusindo',
-    isCurrent: false,
+    period: '2021 — Sekarang',
+    company: 'PT TSRT',
+    isCurrent: true,
     companyColor: 'secondary',
     description:
-      'Merancang dan membangun lebih dari 9 aplikasi web enterprise B2B berbasis Laravel dan Vue.js. Mengimplementasikan CI/CD pipelines, containerization Docker, serta arsitektur database multi-cabang.',
+      'Membangun sistem internal perusahaan: Human Resources Information System, workflow approval digital, tools management system, dan one gate system.',
     achievements: [
-      'Membangun sistem ERP Multi-Cabang dengan sinkronisasi inventori real-time untuk 8 gudang distribusi regional.',
-      'Memangkas waktu eksekusi laporan rekapitulasi finansial bulanan dari 14 menit menjadi 1.8 detik melalui composite indexing & Redis caching.',
-      'Menstandarkan pipeline deployment otomatis GitLab CI/CD dengan Docker Swarm untuk 12 layanan mikro.',
+      'Human Resources Information System.',
+      'Workflow Approval Digital.',
+      'Tools Management System.',
+      'One Gate System.',
     ],
-    techUsed: ['Node.js', 'Laravel', 'Vue.js', 'PostgreSQL', 'Redis', 'Docker'],
+    techUsed: ['CodeIgniter', 'Laravel', 'RESTful API', 'MySQL'],
   },
   {
     id: 'exp-3',
     role: 'Systems Analyst & Web Developer',
-    period: '2016 — 2018',
-    company: 'Cipta Piranti Teknologi',
-    isCurrent: false,
+    period: '2024 — Sekarang',
+    company: 'PT HITEK',
+    isCurrent: true,
     companyColor: 'neutral',
     description:
-      'Menjalankan requirement gathering, pemodelan database relational, serta pengembangan portal internal berbasis REST API untuk operasional logistik dan inventaris pergudangan.',
+      'Menganalisis kebutuhan dan mengembangkan sistem ERP, HRIS, serta modul integrasi sensor mesin untuk proses produksi real-time.',
     achievements: [
-      'Menyusun spesifikasi teknis & skema ERD ternormalisasi (3NF) untuk 5 sistem manajemen gudang (WMS).',
-      'Mengembangkan modul integrasi barcode scanner genggam berbasis web progresif untuk mempercepat proses stock opname hingga 3x lipat.',
+      'ERP System.',
+      'Human Resources Information System.',
+      'Mengembangkan modul integrasi sensor machine realtime production process.',
     ],
-    techUsed: ['PHP', 'MySQL', 'RESTful API', 'JavaScript', 'Linux Ubuntu Server'],
+    techUsed: ['PHP', 'MySQL', 'PostgreSQL', 'RESTful API', 'React.js', 'Express.js', 'Linux Ubuntu Server'],
   },
 ];
 
 export const EDUCATION_DATA: EducationItem[] = [
   {
     id: 'edu-1',
-    degree: 'Sarjana Komputer (S.Kom.) — Teknik Informatika',
-    period: '2012 — 2016',
-    institution: 'Universitas Teknologi Nasional Bandung',
-    gpa: 'IPK 3.82 / 4.00 (Cum Laude)',
-    focus: 'Rekayasa Perangkat Lunak Enterprise, Arsitektur Basis Data Relasional & Sistem Terdistribusi',
+    degree: 'Diploma — Manajemen Informatika',
+    period: '2005 — 2008',
+    institution: 'STMI Bani Saleh',
   },
 ];
 
-export const CERTIFICATES_DATA: CertificateItem[] = [
-  {
-    id: 'cert-1',
-    title: 'Certified Solutions Architect',
-    subtitle: 'Enterprise Cloud & Distributed Systems',
-    issuer: 'Cloud Native Architecture Board',
-    issueDate: 'Agustus 2023',
-    credentialId: 'CSA-ID-2023-8841',
-  },
-  {
-    id: 'cert-2',
-    title: 'Enterprise Database Specialist',
-    subtitle: 'High-Scale PostgreSQL Administration',
-    issuer: 'PostgreSQL Professional Certification',
-    issueDate: 'November 2022',
-    credentialId: 'EDS-PG-2022-4190',
-  },
-  {
-    id: 'cert-3',
-    title: 'Smart Manufacturing & MES Architect',
-    subtitle: 'ISA-95 Shop Floor & IIoT Telemetry',
-    issuer: 'Industrial Automation Institute',
-    issueDate: 'Maret 2024',
-    credentialId: 'MES-IIOT-2024-1102',
-  },
-  {
-    id: 'cert-4',
-    title: 'Linux Server & Container Hardening',
-    subtitle: 'Docker Swarm, Nginx & High-Availability',
-    issuer: 'Linux Enterprise Foundation',
-    issueDate: 'Mei 2021',
-    credentialId: 'LFCS-ID-2021-7734',
-  },
-];
+export const CERTIFICATES_DATA: CertificateItem[] = [];
 
 export const SKILLS_PROGRESS_DATA = [
   { label: 'Backend (PHP/Laravel, Node.js, REST API)', percentage: 95 },
-  { label: 'Manufacturing IT & PPIC Workflows', percentage: 94 },
+  { label: 'Manufacturing & PPIC Workflows', percentage: 94 },
   { label: 'Database Architecture & Index Tuning', percentage: 92 },
-  { label: 'Frontend (Vue.js, Tailwind CSS, TypeScript)', percentage: 88 },
-  { label: 'DevOps, Docker & Linux Server Admin', percentage: 86 },
+  { label: 'Frontend (React.js, Tailwind CSS, TypeScript)', percentage: 88 },
 ];
 
 export const DOMAIN_TAGS_DATA = [
-  { label: 'PPIC & Material Planning', highlighted: true },
+  { label: 'ERP', highlighted: true },
+  { label: 'HRIS', highlighted: false },
+  { label: 'Workflow Approval Digital', highlighted: false },
   { label: 'WIP Real-Time Tracking', highlighted: false },
-  { label: 'Standard Cycle Time', highlighted: false },
-  { label: 'BOM Multi-Level', highlighted: false },
-  { label: 'ERD High-Complexity', highlighted: false },
-  { label: 'RESTful Microservices', highlighted: false },
-  { label: 'Docker Containers', highlighted: false },
-  { label: 'Nginx Reverse Proxy', highlighted: false },
-  { label: 'Redis In-Memory Caching', highlighted: false },
-  { label: 'Git CI/CD Workflows', highlighted: false },
+  { label: 'Sensor Machine Press', highlighted: false },
+  { label: 'RESTful API', highlighted: false },
+  { label: 'MySQL & PostgreSQL', highlighted: false },
+  { label: 'Nginx', highlighted: false },
+  { label: 'Linux Ubuntu Server', highlighted: false },
+  { label: 'React.js', highlighted: false },
 ];
+
+const IMG_PPIC =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBvwEoZtRX2aDjqAGpaAMyQoOgq8TNxA2ZxsvID0uCQokqgFu9jEwL0gDBrmlFPlkKByFOmKfHXIVKLBfOy8ix_zCBkME8xVes6BCHr3g-3BDt1VLSI4SywyMJdFuluYzW5suWJwjVt-8YS8NnRJ5QPjxefT_jXeH3Ccrm1siFttirVoUd2Haau2VefXPF2oscXuLDvNsFUP5ryVlJ52tu8nI0m40ekuLkTqQvyysCF';
+const IMG_ERP =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuBv9hg8nnsESXkrbMRBKr5ybLZ5Hv9H6fqxcCBWe9KGsaG9Bi6y6sZef5KHOpTHv5pIbwFGU7R5ZvSPNxkr0Y00ghEhw0srkRl_9zFncmMVImxyWRnqosPCxVbqjfBuNYP9f6x_qK6rrAqO4cYQZ_ORWa_LZeUMQ_Eefiz4aq6dL8leFM-1g3VgsKvZgu9RlkRXawE98Ro3cnUc32E-iojMPMEZCOI8-qw7W35__WkN';
 
 export const PORTFOLIO_PROJECTS: ProjectCaseStudy[] = [
   {
@@ -260,46 +231,39 @@ export const PORTFOLIO_PROJECTS: ProjectCaseStudy[] = [
     categoryLabel: 'Manufacturing Core',
     categoryColor: 'primary',
     shortDescription:
-      'Platform digitalisasi lantai pabrik terintegrasi untuk pelacakan alur material, penentuan cycle time standar, serta manajemen Bill of Materials (BOM) multi-layer.',
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBvwEoZtRX2aDjqAGpaAMyQoOgq8TNxA2ZxsvID0uCQokqgFu9jEwL0gDBrmlFPlkKByFOmKfHXIVKLBfOy8ix_zCBkME8xVes6BCHr3g-3BDt1VLSI4SywyMJdFuluYzW5suWJwjVt-8YS8NnRJ5QPjxefT_jXeH3Ccrm1siFttirVoUd2Haau2VefXPF2oscXuLDvNsFUP5ryVlJ52tu8nI0m40ekuLkTqQvyysCF',
-    imageAlt:
-      'High-tech manufacturing shop-floor tablet interface displaying real-time PPIC production line tracking with WIP indicators, barcode scan status, dark sleek UI with neon cyan and amber metrics on industrial factory floor with machine components.',
-    techStack: ['Laravel', 'PostgreSQL', 'Vue.js', 'Tailwind'],
-    clientIndustry: 'Manufaktur Komponen Otomotif & Presisi Logam',
-    completionDate: 'Oktober 2024',
-    role: 'Lead Systems Architect & Full-Stack Engineer',
+      'Platform digitalisasi live monitoring terintegrasi sensor untuk progress produksi, serta manajemen PPIC.',
+    imageUrl: IMG_PPIC,
+    imageAlt: 'Antarmuka monitoring produksi dan pelacakan WIP real-time di lantai pabrik.',
+    techStack: ['Express.js', 'PostgreSQL', 'React.js', 'Tailwind'],
+    clientIndustry: 'Manufaktur',
+    completionDate: '2025',
+    role: 'Lead Project ERP',
     problemStatement:
-      'Pencatatan Work-in-Progress (WIP) di 38 stasiun kerja sebelumnya dilakukan secara manual menggunakan kartu kanban fisik dan spreadsheet terpisah. Hal ini memicu keterlambatan visibilitas stok WIP hingga 16 jam, bottleneck penjadwalan mesin, serta deviasi perhitungan kebutuhan material (MRP) terhadap Bill of Materials (BOM) multi-level.',
+      'Progres produksi dan kebutuhan material di lantai produksi perlu dipantau secara langsung, tanpa menunggu rekapitulasi manual.',
     engineeringSolution:
-      'Membangun platform MES & PPIC terpusat berbasis Laravel, Vue.js, dan PostgreSQL dengan integrasi pemindaian QR/Barcode di setiap stasiun kerja shop-floor. Setiap perpindahan lot produksi memperbarui status WIP secara real-time, memvalidasi kuota material terhadap struktur BOM 5-level, dan menghitung Standard Cycle Time secara otomatis.',
+      'Membangun platform live monitoring yang terintegrasi dengan sensor machine press untuk memantau progres produksi dan WIP secara real-time, serta mengelola PPIC dan kebutuhan material produksi.',
     architectureHighlights: [
-      'Desain skema ERD PostgreSQL dengan Recursive CTE untuk penelusuran pohon BOM 5-level dalam waktu < 15ms.',
-      'Integrasi terminal scanner industri di lantai produksi dengan sinkronisasi event-driven WebSocket.',
-      'Algoritma kalkulasi kapasitas lini produksi (Rough-Cut Capacity Planning) berdasarkan historis cycle time aktual.',
+      'Integrasi sensor machine press untuk pelacakan WIP real-time.',
+      'Perhitungan kebutuhan material produksi secara real-time.',
+      'Backend Express.js dengan PostgreSQL dan frontend React.js.',
     ],
     metricsImpact: [
-      { label: 'Reduksi Bottleneck WIP', value: '-32%', detail: 'Penurunan penumpukan barang setengah jadi di lini perakitan' },
-      { label: 'Efisiensi Laporan Harian', value: '70% Lebih Cepat', detail: 'Otomasi rekapitulasi hasil produksi shift 1, 2, dan 3' },
-      { label: 'Akurasi Inventori BOM', value: '99.6%', detail: 'Sinkronisasi real-time antara gudang bahan baku & shop-floor' },
+      { label: 'Pelacakan WIP', value: 'Real-Time', detail: 'Terintegrasi dengan sensor machine press' },
+      { label: 'Kebutuhan Material', value: 'Real-Time', detail: 'Kebutuhan material produksi dipantau langsung' },
+      { label: 'Jangkauan', value: '4 Plant', detail: 'Arsitektur terintegrasi di 4 plant produksi' },
     ],
-    liveDemoUrl: '#demo-ppic-mes',
-    repoUrl: 'https://github.com/argapratama-dev/mes-ppic-wip-suite',
+    liveDemoUrl: '',
+    repoUrl: '',
     slides: [
       {
-        title: 'Shop-Floor WIP Tracking & Kanban Terminal',
-        caption: 'Antarmuka operator lini produksi untuk scan QR Work Order, pelacakan kuantitas OK/NG, dan indikator Standard Cycle Time.',
-        type: 'dashboard',
-      },
-      {
-        title: 'Multi-Level BOM & MRP Explosion Engine',
-        caption: 'Struktur relasional PostgreSQL Recursive CTE yang mengurai ribuan sub-assembly komponen beserta lead-time pengadaan.',
-        type: 'architecture',
-      },
-      {
-        title: 'Analitik Real-Time Output vs Target PPIC',
-        caption: 'Pemantauan live pencapaian jadwal induk produksi (MPS) per stasiun kerja dengan deteksi deviasi cycle time.',
+        title: 'Live Monitoring Progress Produksi',
+        caption: 'Pemantauan progres produksi dan WIP secara real-time dari data sensor machine press.',
         type: 'telemetry',
+      },
+      {
+        title: 'Manajemen PPIC & Material Produksi',
+        caption: 'Perencanaan produksi dan kebutuhan material produksi secara real-time.',
+        type: 'dashboard',
       },
     ],
   },
@@ -310,96 +274,82 @@ export const PORTFOLIO_PROJECTS: ProjectCaseStudy[] = [
     categoryLabel: 'Web Enterprise',
     categoryColor: 'secondary',
     shortDescription:
-      'Sistem ERP terpusat untuk sinkronisasi inventori antar 8 gudang regional, modul procurement terintegrasi, dan reporting keuangan otomatis dengan audit trail ketat.',
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBv9hg8nnsESXkrbMRBKr5ybLZ5Hv9H6fqxcCBWe9KGsaG9Bi6y6sZef5KHOpTHv5pIbwFGU7R5ZvSPNxkr0Y00ghEhw0srkRl_9zFncmMVImxyWRnqosPCxVbqjfBuNYP9f6x_qK6rrAqO4cYQZ_ORWa_LZeUMQ_Eefiz4aq6dL8leFM-1g3VgsKvZgu9RlkRXawE98Ro3cnUc32E-iojMPMEZCOI8-qw7W35__WkN',
-    imageAlt:
-      'Modern dark-mode enterprise resource planning ERP web application dashboard on a high resolution screen showing multi-branch inventory logistics data tables, charts, dark theme UI with glowing cyan charts.',
-    techStack: ['Node.js', 'PostgreSQL', 'Redis', 'Docker'],
-    clientIndustry: 'Distribusi Industri & Logistik Nasional',
-    completionDate: 'Mei 2024',
-    role: 'Senior Full-Stack & Database Architect',
+      'Sistem ERP terintegrasi untuk beberapa plant produksi dengan 99.8% uptime.',
+    imageUrl: IMG_ERP,
+    imageAlt: 'Dashboard aplikasi web ERP dengan data tabel dan grafik.',
+    techStack: ['React.js', 'Express.js', 'PostgreSQL', 'Nginx'],
+    clientIndustry: 'Manufaktur Multi-Plant',
+    completionDate: '2025',
+    role: 'Lead Project ERP',
     problemStatement:
-      'Perusahaan dengan 8 gudang distribusi regional mengalami selisih stok antar-cabang, duplikasi Purchase Order (PO), dan proses tutup buku bulanan yang memakan waktu 5 hari kerja karena sistem masih terpisah di masing-masing cabang.',
+      'Operasional di beberapa plant produksi membutuhkan satu sistem terpadu yang andal dan selalu tersedia.',
     engineeringSolution:
-      'Merancang sistem ERP berbasis layanan terdistribusi menggunakan Node.js, PostgreSQL, dan Redis In-Memory Caching yang dideploy di atas klaster Docker. Menerapkan transaksi ACID ketat dengan row-level locking untuk mutasi stok antar-cabang serta pencatatan immutable audit log untuk seluruh persetujuan procurement dan jurnal akuntansi.',
+      'Merancang ulang arsitektur ERP terintegrasi di 4 plant produksi menggunakan React.js, Express.js, dan PostgreSQL, dengan Nginx di sisi server.',
     architectureHighlights: [
-      'Arsitektur Multi-Tenant & Multi-Warehouse dengan mekanisme Optimistic/Pessimistic Locking pada transaksi stok paralel.',
-      'Caching agresif terdistribusi menggunakan Redis untuk katalog 120.000+ SKU dan matriks harga bertingkat.',
-      'Automated Financial Ledger Generator yang memetakan Goods Receipt & Invoice langsung ke jurnal buku besar.',
+      'Arsitektur ERP terintegrasi untuk 4 plant produksi.',
+      'Frontend React.js dan backend Express.js dengan database PostgreSQL.',
+      'Nginx sebagai web server / reverse proxy.',
     ],
     metricsImpact: [
-      { label: 'Waktu Rekap Finansial', value: '1.8 Detik', detail: 'Turun dari 14 menit melalui tuning composite index PostgreSQL' },
-      { label: 'Sinkronisasi Gudang', value: '8 Regional', detail: 'Zero data-drift antar cabang dengan replikasi real-time' },
-      { label: 'Throughput Transaksi', value: '2,400 req/dtk', detail: 'Diuji pada beban puncak penutupan kuartal' },
+      { label: 'Uptime', value: '99.8%', detail: 'Ketersediaan sistem ERP' },
+      { label: 'Plant Terintegrasi', value: '4 Plant', detail: 'Plant produksi dalam satu sistem' },
+      { label: 'Stack', value: 'React + Express', detail: 'Dengan PostgreSQL dan Nginx' },
     ],
-    liveDemoUrl: '#demo-erp-enterprise',
-    repoUrl: 'https://github.com/argapratama-dev/enterprise-erp-multibranch',
+    liveDemoUrl: '',
+    repoUrl: '',
     slides: [
       {
-        title: 'Multi-Warehouse Inventory & Logistics Control',
-        caption: 'Dashboard kendali stok lintas 8 cabang regional dengan matriks reorder point otomatis dan status pengiriman.',
+        title: 'Dashboard ERP Multi-Plant',
+        caption: 'Ringkasan operasional dari seluruh plant produksi dalam satu tampilan.',
         type: 'dashboard',
       },
       {
-        title: 'Distributed Node.js + Redis + PostgreSQL Cluster',
-        caption: 'Topologi deployment Docker Swarm dengan Nginx Load Balancer dan Redis Cache invalidation pipeline.',
+        title: 'Arsitektur React + Express + PostgreSQL',
+        caption: 'Struktur aplikasi dengan Nginx sebagai web server.',
         type: 'architecture',
-      },
-      {
-        title: 'Procurement Approval & Immutable Audit Trail',
-        caption: 'Pelacakan alur Purchase Request (PR) hingga Purchase Order (PO) dan 3-way matching invoice secara otomatis.',
-        type: 'telemetry',
       },
     ],
   },
   {
-    id: 'oee-machine-monitoring',
-    title: 'Dashboard Pemantauan Mesin & Analitik OEE',
-    category: 'iot',
-    categoryLabel: 'Otomasi Pabrik & IoT',
-    categoryColor: 'primary',
+    id: 'hris',
+    title: 'Human Resources Information System (HRIS)',
+    category: 'web',
+    categoryLabel: 'Web Enterprise',
+    categoryColor: 'secondary',
     shortDescription:
-      'Sistem analitik efisiensi mesin secara live berbasis transmisi MQTT & WebSocket. Mendeteksi anomaly vibrasi serta downtime mesin dengan notifikasi seketika.',
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCBE5-PM5QEmRd38D2xDEf0w8SHZz12r1543SbSB-PLc8_PjhkT5tMqhAEv0jCpdn-6VDH_35XV1gDZcK1QiZkmX7WNK2nHtQjxae32RX5ck5nZ4tObeY7S0eFh1HvV_H2esZTxcgwvHD8rpwX8A8nhAe788gtNSrA_SzQmOxCQu_PtBS4XFyk9HujV0brLaB9nF_zB48RqF9y6jSfDKgu2u0C7QxWay4k6CFCyplTD',
-    imageAlt:
-      'Industrial IoT dashboard visual showing machine sensor readings, Overall Equipment Effectiveness OEE telemetry gauges, live status alerts in a futuristic control room with cyan data visuals and dark minimalist background.',
-    techStack: ['Python', 'MQTT', 'WebSockets', 'TimescaleDB'],
-    clientIndustry: 'Pabrik Injeksi Plastik & Stamping Presisi',
-    completionDate: 'Januari 2025',
-    role: 'IIoT Backend & Telemetry Lead',
+      'Sistem informasi sumber daya manusia beserta workflow approval digital, tools management, dan one gate system.',
+    imageUrl: IMG_ERP,
+    imageAlt: 'Aplikasi web HRIS dengan data karyawan dan alur persetujuan.',
+    techStack: ['CodeIgniter', 'Laravel', 'MySQL', 'RESTful API'],
+    clientIndustry: 'Korporasi',
+    completionDate: '2021 — Sekarang',
+    role: 'Senior Full-Stack Developer',
     problemStatement:
-      'Tim maintenance dan manajemen produksi tidak memiliki visibilitas seketika saat mesin CNC/Injeksi mengalami micro-stoppage atau penurunan kecepatan siklus. Perhitungan OEE (Availability, Performance, Quality) baru diketahui keesokan harinya sehingga respon perbaikan terlambat.',
+      'Proses SDM dan persetujuan internal membutuhkan sistem digital terpusat dengan hak akses berbasis role.',
     engineeringSolution:
-      'Membangun pipeline telemetri IIoT yang mengakuisisi sinyal PLC mesin melalui broker MQTT menuju worker Python, menyimpannya ke dalam TimescaleDB (hypertable time-series), serta menyiarkan metrik OEE dan peringatan anomali vibrasi/suhu secara real-time (< 200ms latency) ke layar Andon dan dashboard manajemen melalui WebSockets.',
+      'Mengembangkan HRIS, workflow approval digital, tools management system, dan one gate system menggunakan CodeIgniter dan Laravel dengan database MySQL dan RESTful API.',
     architectureHighlights: [
-      'Ingesti 5,000+ pesan sensor per detik menggunakan Mosquitto MQTT Broker & async Python consumers.',
-      'Penyimpanan time-series menggunakan TimescaleDB Continuous Aggregates untuk kompresi data historis hingga 90%.',
-      'Sistem eskalasi Andon otomatis via WhatsApp/Telegram API ketika mesin berhenti lebih dari 180 detik.',
+      'Sistem berbasis role/permission.',
+      'Workflow approval digital.',
+      'Backend CodeIgniter / Laravel dengan RESTful API dan MySQL.',
     ],
     metricsImpact: [
-      { label: 'Peningkatan Skor OEE', value: '+14.5%', detail: 'Rata-rata OEE naik dari 68.2% menjadi 82.7% dalam 4 bulan' },
-      { label: 'Respon Downtime (MTTR)', value: '-45%', detail: 'Notifikasi Andon instan langsung ke teknisi maintenance' },
-      { label: 'Latensi Telemetri', value: '< 180ms', detail: 'Streaming live dari sensor PLC ke browser ruang kontrol' },
+      { label: 'Modul', value: '4 Sistem', detail: 'HRIS, Workflow Approval, Tools Mgmt, One Gate' },
+      { label: 'Backend', value: 'Laravel / CI', detail: 'Dengan RESTful API' },
+      { label: 'Database', value: 'MySQL', detail: 'Basis data relasional' },
     ],
-    liveDemoUrl: '#demo-oee-telemetry',
-    repoUrl: 'https://github.com/argapratama-dev/iiot-oee-telemetry-engine',
+    liveDemoUrl: '',
+    repoUrl: '',
     slides: [
       {
-        title: 'Live OEE Command Center (Availability, Performance, Quality)',
-        caption: 'Tampilan ruang kontrol real-time untuk 64 mesin produksi lengkap dengan indikator status Run, Idle, Setup, dan Breakdown.',
-        type: 'telemetry',
-      },
-      {
-        title: 'MQTT Broker to TimescaleDB High-Throughput Pipeline',
-        caption: 'Arsitektur edge gateway PLC -> MQTT -> Python Async Worker -> TimescaleDB & WebSocket Broadcaster.',
-        type: 'architecture',
-      },
-      {
-        title: 'Predictive Vibration & Downtime Root-Cause Matrix',
-        caption: 'Analisis Pareto penyebab downtime (Six Big Losses) dan grafik spektrum temperatur/getaran spindle.',
+        title: 'Human Resources Information System',
+        caption: 'Pengelolaan data dan proses sumber daya manusia.',
         type: 'dashboard',
+      },
+      {
+        title: 'Workflow Approval Digital',
+        caption: 'Alur persetujuan digital dengan hak akses berbasis role.',
+        type: 'architecture',
       },
     ],
   },

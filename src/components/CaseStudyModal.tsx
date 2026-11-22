@@ -260,6 +260,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <span className="material-symbols-outlined text-[16px]">monitoring</span>
               <span>{showLiveSimulation ? 'Tampilkan Screenshot UI' : 'Simulasi Live Telemetry'}</span>
             </button>
+            {project.repoUrl && (
             <a
               href={project.repoUrl}
               target="_blank"
@@ -269,6 +270,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               <span className="material-symbols-outlined text-[16px]">terminal</span>
               <span>Dokumentasi & Arsitektur</span>
             </a>
+            )}
           </div>
 
           <button
