@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CaseStudyModal } from "./components/CaseStudyModal";
 import { ProjectThumbnail } from "./components/ProjectVisual";
 import { TechNoteModal } from "./components/TechNoteModal";
@@ -34,9 +34,9 @@ type PortfolioCategory = "all" | "manufacturing" | "web" | "iot";
 const NAV_ITEMS: { id: NavSectionId; label: string; icon: string }[] = [
   { id: "home", label: "Home", icon: "home" },
   { id: "about-me", label: "About Me", icon: "person" },
-  { id: "resume", label: "Resume", icon: "description" },
-  { id: "portfolio", label: "Portfolio", icon: "precision_manufacturing" },
-  { id: "blog", label: "Technical Notes", icon: "article" },
+  { id: "resume", label: "Resume", icon: "school" },
+  { id: "portfolio", label: "Portfolio", icon: "work" },
+  { id: "blog", label: "Technical Notes", icon: "menu_book" },
   { id: "contact", label: "Contact", icon: "mail" },
 ];
 
@@ -49,7 +49,12 @@ export default function App() {
   const [selectedNote, setSelectedNote] = useState<TechnicalNoteItem | null>(
     null,
   );
-  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">(() =>
+    document.documentElement.getAttribute("data-theme") === "dark"
+      ? "dark"
+      : "light",
+  );
+  const contentRef = useRef<HTMLDivElement>(null);
   const [roleIndex, setRoleIndex] = useState(0);
   const [cvDownloadedToast, setCvDownloadedToast] = useState(false);
   const [selectedDomainTag, setSelectedDomainTag] = useState<string>(
@@ -86,41 +91,32 @@ export default function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
+  // Theme switch (light / dark), persisted
   useEffect(() => {
-    const sectionElements = NAV_ITEMS.map((item) =>
-      document.getElementById(item.id),
-    ).filter(Boolean) as HTMLElement[];
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      /* ignore */
+    }
+  }, [theme]);
 
-    if (sectionElements.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) {
-          const id = visible[0].target.id as NavSectionId;
-          setActiveSection(id);
-        }
-      },
-      {
-        rootMargin: "-20% 0px -55% 0px",
-        threshold: [0.1, 0.25, 0.5],
-      },
-    );
-
-    sectionElements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  // Each section is a "page": reset scroll when switching
+  useEffect(() => {
+    contentRef.current?.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0 });
+  }, [activeSection]);
 
   const navigateToSection = (id: NavSectionId) => {
     setActiveSection(id);
-    setMobileDrawerOpen(false);
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-      window.history.replaceState(null, "", `#${id}`);
-    }
+    window.history.replaceState(null, "", `#${id}`);
+  };
+
+  const activeIndex = NAV_ITEMS.findIndex((i) => i.id === activeSection);
+  const goRelative = (delta: number) => {
+    const next =
+      (activeIndex + delta + NAV_ITEMS.length) % NAV_ITEMS.length;
+    navigateToSection(NAV_ITEMS[next].id);
   };
 
   const handleDownloadCv = (e?: React.MouseEvent) => {
@@ -166,389 +162,203 @@ export default function App() {
   );
 
   return (
-    <div className="bg-background font-body-md text-on-surface antialiased min-h-screen selection:bg-primary-container selection:text-on-primary-fixed">
-      {/* Left Fixed Identity Sidebar (Desktop >= 1024px) */}
-      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-80 bg-surface-base shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-r border-border-subtle/50 z-40 flex-col justify-between p-space-lg overflow-y-auto">
-        <div className="flex flex-col items-center text-center">
-          {/* Avatar Circle */}
-          <div className="relative mb-space-md">
-            <div className="w-28 h-28 rounded-full bg-surface-elevated p-1 ring-2 ring-primary-container/30 flex items-center justify-center">
-              <div className="w-full h-full rounded-full bg-surface-card flex items-center justify-center overflow-hidden">
-                <span className="material-symbols-outlined text-primary text-[54px]">
-                  person
-                </span>
-              </div>
-            </div>
-            <div
-              className="absolute bottom-1 right-2 w-4 h-4 rounded-full bg-primary-container ring-2 ring-surface-base"
-              title="Open to Work"
-            />
-          </div>
-
-          <h1 className="font-headline-sm text-headline-sm text-text-primary tracking-tight">
-            {PROFILE_DATA.name}
-          </h1>
-          <p className="mt-space-xs font-label-md text-label-md text-primary font-medium tracking-wide">
-            {PROFILE_DATA.title}
-          </p>
-
-          {/* Social / Direct Links */}
-          <div className="flex items-center gap-space-sm mt-space-lg">
-            <a
-              aria-label="Code Repository (GitHub)"
-              title="GitHub Repository"
-              href={PROFILE_DATA.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                terminal
-              </span>
-            </a>
-            <a
-              aria-label="Professional Network (LinkedIn)"
-              title="LinkedIn Profile"
-              href={PROFILE_DATA.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
-            >
-              <span className="material-symbols-outlined text-[20px]">hub</span>
-            </a>
-            <a
-              aria-label="Direct Communication (WhatsApp)"
-              title="WhatsApp Direct"
-              href={PROFILE_DATA.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                chat
-              </span>
-            </a>
-            <a
-              aria-label="Email Inquiry"
-              title="Kirim Pesan Kontak"
-              href="#contact"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateToSection("contact");
-              }}
-              className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
-            >
-              <span className="material-symbols-outlined text-[20px]">
-                mail
-              </span>
-            </a>
-          </div>
-
-          {/* Quick Sidebar Summary Info */}
-          <div className="w-full mt-space-lg pt-space-md border-t border-border-subtle/70 text-left space-y-2.5">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-text-muted">Pengalaman</span>
-              <span className="font-mono text-text-primary font-semibold tabular-nums">
-                8+ Tahun
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-text-muted">Sistem Produksi</span>
-              <span className="font-mono text-primary font-semibold tabular-nums">
-                14+ Terdeploy
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-text-muted">Domisili</span>
-              <span className="text-text-secondary">
-                Indonesia (Remote/On-Site)
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Primary CTA & Copyright */}
-        <div className="flex flex-col gap-space-md mt-space-lg">
-          <button
-            type="button"
-            onClick={handleDownloadCv}
-            className="w-full py-3 px-space-md rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-label-md flex items-center justify-center gap-space-xs shadow-[0_0_16px_rgba(0,210,211,0.35)] hover:bg-primary transition-all cursor-pointer whitespace-nowrap"
-          >
-            <span className="material-symbols-outlined text-[18px]">
-              download
-            </span>
-            <span>Unduh CV Lengkap (PDF)</span>
-          </button>
-          {cvDownloadedToast && (
-            <div className="text-center py-1.5 px-3 rounded-lg bg-primary-container/15 border border-primary-container/30 text-primary text-xs font-mono">
-              CV_ArgaPratama_FullStackDeveloper.pdf terunduh
-            </div>
-          )}
-          <div className="text-center">
-            <p className="font-body-sm text-body-sm text-text-muted">
-              © {PROFILE_DATA.copyrightYear} Heerman Sadi. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </aside>
-
-      {/* Mobile & Tablet Slide-Out Drawer Menu (< 1024px) */}
-      {mobileDrawerOpen && (
+    <div className="relative min-h-screen overflow-x-hidden bg-[var(--page-bg)] font-body-md text-text-primary antialiased transition-colors duration-300 selection:bg-primary-container selection:text-white">
+      {/* Background decorations */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
-          className="fixed inset-0 z-50 lg:hidden bg-black/75 backdrop-blur-sm flex"
-          onClick={() => setMobileDrawerOpen(false)}
-        >
-          <div
-            className="w-80 max-w-[85vw] h-full bg-surface-base border-r border-border-subtle p-space-lg flex flex-col justify-between overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+          className="absolute left-12 top-6 hidden h-[170px] w-[140px] md:block"
+          style={{
+            backgroundImage:
+              "radial-gradient(var(--page-dot) 2.5px, transparent 3px)",
+            backgroundSize: "23.5px 23.5px",
+          }}
+        />
+        <div className="absolute -top-56 right-[6%] h-[640px] w-[640px] rounded-full bg-[var(--page-deco)]" />
+        <div className="absolute left-[7%] top-[48%] hidden h-9 w-9 rounded-full bg-[var(--page-deco)] lg:block" />
+        <div className="absolute left-[4%] top-[72%] hidden h-5 w-5 rounded-full bg-[var(--page-deco)] lg:block" />
+        <div className="absolute right-[5%] top-[64%] hidden h-5 w-5 rounded-full bg-[var(--page-deco)] lg:block" />
+        <div className="absolute right-[8%] top-[2%] hidden h-12 w-12 rotate-12 bg-[var(--page-deco)] lg:block" />
+        <div className="absolute -left-20 top-[20%] hidden h-[140%] w-40 rotate-[40deg] bg-[var(--page-deco)] lg:block" />
+      </div>
+
+      {/* Colour theme switch (2 options) */}
+      <div
+        role="group"
+        aria-label="Pilihan warna tema"
+        className="fixed right-3 top-3 z-50 flex items-center gap-1 rounded-full bg-[var(--nav-bg)] p-1 shadow-lg lg:bottom-5 lg:left-5 lg:right-auto lg:top-auto"
+      >
+        {(
+          [
+            { id: "light", icon: "light_mode", label: "Tema terang" },
+            { id: "dark", icon: "dark_mode", label: "Tema gelap" },
+          ] as const
+        ).map((opt) => (
+          <button
+            key={opt.id}
+            type="button"
+            title={opt.label}
+            aria-label={opt.label}
+            aria-pressed={theme === opt.id}
+            onClick={() => setTheme(opt.id)}
+            className={`flex h-9 w-9 cursor-pointer items-center justify-center rounded-full transition-colors ${
+              theme === opt.id
+                ? "bg-primary-container text-white"
+                : "text-text-muted hover:text-text-primary"
+            }`}
           >
-            <div>
-              <div className="flex items-center justify-between pb-space-md border-b border-border-subtle">
-                <span className="font-label-sm text-label-sm text-primary uppercase tracking-wider">
-                  Profil & Navigasi
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setMobileDrawerOpen(false)}
-                  aria-label="Tutup menu"
-                  className="w-9 h-9 rounded-full bg-surface-card text-text-secondary flex items-center justify-center"
-                >
-                  <span className="material-symbols-outlined text-[20px]">
-                    close
+            <span className="material-symbols-outlined text-[20px]">
+              {opt.icon}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div className="relative lg:flex lg:min-h-screen lg:items-center lg:justify-center">
+        <div className="relative w-full lg:h-[min(760px,calc(100vh-4rem))] lg:w-[calc(100%-14rem)] lg:max-w-[1280px]">
+          {/* Profile panel (left) */}
+          <aside className="relative z-0 flex flex-col items-center rounded-b-[28px] bg-[var(--sidebar-bg)] px-6 pb-8 pt-14 text-center text-white shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:left-0 lg:w-[420px] lg:rounded-[30px] lg:pb-6 lg:pl-0 lg:pr-[40px] lg:pt-[70px]">
+            <div className="relative lg:w-[380px] lg:pl-0">
+              <div className="relative mx-auto h-[170px] w-[170px]">
+                <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border-[3px] border-white bg-white">
+                  <span
+                    className="material-symbols-outlined text-[110px] text-[var(--sidebar-bg)]"
+                    style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}
+                  >
+                    person
                   </span>
-                </button>
-              </div>
-
-              <div className="flex flex-col items-center text-center mt-space-md">
-                <div className="w-20 h-20 rounded-full bg-surface-elevated p-1 ring-2 ring-primary-container/30 flex items-center justify-center mb-3">
-                  <div className="w-full h-full rounded-full bg-surface-card flex items-center justify-center">
-                    <span className="material-symbols-outlined text-primary text-[40px]">
-                      person
-                    </span>
-                  </div>
                 </div>
-                <h2 className="font-headline-sm text-headline-sm text-text-primary">
-                  {PROFILE_DATA.name}
-                </h2>
-                <p className="text-xs text-primary mt-1">
-                  {PROFILE_DATA.title}
-                </p>
               </div>
 
-              <nav className="mt-space-lg space-y-1.5">
-                {NAV_ITEMS.map((item) => {
-                  const isActive = activeSection === item.id;
-                  return (
-                    <a
-                      key={item.id}
-                      href={`#${item.id}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateToSection(item.id);
-                      }}
-                      className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-label-md text-label-md transition-colors ${
-                        isActive
-                          ? "bg-primary-container text-on-primary-fixed font-semibold"
-                          : "text-text-secondary hover:bg-surface-card hover:text-text-primary"
-                      }`}
-                    >
-                      <span className="material-symbols-outlined text-[20px]">
-                        {item.icon}
-                      </span>
-                      <span>{item.label}</span>
-                    </a>
-                  );
-                })}
-              </nav>
-            </div>
+              <h1 className="mt-6 text-[27px] font-semibold leading-tight tracking-tight">
+                {PROFILE_DATA.name}
+              </h1>
+              <p className="mx-auto mt-1 max-w-[300px] text-[15px] font-light leading-snug text-white/80">
+                {PROFILE_DATA.title}
+              </p>
 
-            <div className="pt-space-md border-t border-border-subtle space-y-3">
+              <div className="mt-5 flex items-center justify-center gap-5">
+                {[
+                  {
+                    label: "GitHub",
+                    href: PROFILE_DATA.githubUrl,
+                    icon: "terminal",
+                  },
+                  {
+                    label: "LinkedIn",
+                    href: PROFILE_DATA.linkedinUrl,
+                    icon: "hub",
+                  },
+                  {
+                    label: "WhatsApp",
+                    href: PROFILE_DATA.whatsappUrl,
+                    icon: "chat",
+                  },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    aria-label={s.label}
+                    title={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-colors hover:bg-white/20"
+                  >
+                    <span className="material-symbols-outlined text-[21px]">
+                      {s.icon}
+                    </span>
+                  </a>
+                ))}
+              </div>
+
               <button
                 type="button"
                 onClick={handleDownloadCv}
-                className="w-full py-3 px-4 rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-xs flex items-center justify-center gap-2 shadow-[0_0_16px_rgba(0,210,211,0.35)]"
+                className="mx-auto mt-9 flex cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-full border-2 border-white px-7 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-white hover:text-[var(--sidebar-bg)]"
               >
                 <span className="material-symbols-outlined text-[18px]">
                   download
                 </span>
-                <span>Unduh CV Lengkap (PDF)</span>
+                <span>Download CV</span>
               </button>
-              <p className="text-center font-body-sm text-body-sm text-text-muted">
-                © {PROFILE_DATA.copyrightYear} Herman Sadi
-              </p>
+              {cvDownloadedToast && (
+                <div className="mx-auto mt-3 max-w-[280px] rounded-lg bg-white/15 px-3 py-1.5 font-mono text-[11px] text-white">
+                  {PROFILE_DATA.cvFileName} terunduh
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-      )}
 
-      {/* Right Floating Icon Navigation (Desktop >= 1024px) */}
-      <nav
-        aria-label="Navigasi Seksi Utama"
-        className="hidden lg:flex fixed right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-space-sm bg-surface-card/90 backdrop-blur-xl p-space-xs rounded-full shadow-[0_12px_32px_-4px_rgba(0,0,0,0.6)] border border-border-subtle/60"
-      >
-        {NAV_ITEMS.map((item) => {
-          const isActive = activeSection === item.id;
-          return (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              title={item.label}
-              aria-current={isActive ? "page" : undefined}
-              onClick={(e) => {
-                e.preventDefault();
-                navigateToSection(item.id);
-              }}
-              className={`group relative flex items-center justify-center w-12 h-12 rounded-full transition-all ${
-                isActive
-                  ? "bg-primary-container text-on-primary-fixed shadow-[0_0_16px_rgba(0,210,211,0.35)]"
-                  : "text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface"
-              }`}
+            <p className="mt-8 text-[11px] text-white/80 lg:absolute lg:bottom-5 lg:left-0 lg:mt-0 lg:w-[380px]">
+              © {PROFILE_DATA.copyrightYear} Herman Sadi. All rights reserved.
+            </p>
+          </aside>
+
+          {/* Content panel (right) */}
+          <main
+            className="relative z-10 mx-3 mt-4 rounded-[28px] bg-surface-base shadow-[var(--card-shadow)] transition-colors duration-300 lg:absolute lg:inset-y-0 lg:right-0 lg:m-0 lg:w-[calc(100%-380px)] lg:rounded-[30px]"
+          >
+            <div
+              ref={contentRef}
+              className="px-5 pb-28 pt-8 sm:px-8 lg:h-full lg:overflow-y-auto lg:px-12 lg:pb-12 lg:pt-12"
             >
-              <span className="material-symbols-outlined text-[22px]">
-                {item.icon}
-              </span>
-              <span className="absolute right-14 scale-0 group-hover:scale-100 transition-all origin-right bg-surface-elevated text-text-primary font-label-sm text-label-sm py-1 px-3 rounded-full shadow-lg pointer-events-none whitespace-nowrap border border-border-subtle">
-                {item.label}
-              </span>
-            </a>
-          );
-        })}
-      </nav>
-
-      {/* Main Content Area Wrapper */}
-      <div className="lg:pl-80 lg:pr-24">
-        {/* Top Bar Header */}
-        <header className="fixed top-0 left-0 lg:left-80 right-0 h-16 bg-surface-base/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] border-b border-border-subtle/50 z-30 flex items-center justify-between px-space-lg lg:px-space-xl gap-space-md">
-          {/* Left Zone: Brand on Mobile / Quick Navigation Breadcrumb on Desktop */}
-          <div className="flex items-center gap-3 min-w-0">
-            <button
-              type="button"
-              onClick={() => setMobileDrawerOpen(true)}
-              aria-label="Buka menu navigasi"
-              className="lg:hidden w-10 h-10 rounded-lg bg-surface-card border border-border-subtle flex items-center justify-center text-text-primary"
-            >
-              <span className="material-symbols-outlined text-[22px]">
-                menu
-              </span>
-            </button>
-            <a
-              href="#home"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateToSection("home");
-              }}
-              className="font-headline-sm text-sm text-text-primary tracking-tight whitespace-nowrap shrink-0 lg:hidden"
-            >
-              Herman Sadi
-            </a>
-            <div className="hidden lg:flex items-center gap-6 text-xs font-medium text-text-muted">
-              {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigateToSection(item.id);
-                  }}
-                  className={`transition-colors whitespace-nowrap shrink-0 ${
-                    activeSection === item.id
-                      ? "text-primary font-semibold"
-                      : "hover:text-text-primary"
-                  }`}
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* Right Zone: Status & Quick Action */}
-          <div className="flex items-center gap-space-md shrink-0">
-            <span className="hidden sm:inline-block font-label-sm text-label-sm text-text-muted whitespace-nowrap">
-              {PROFILE_DATA.headerStatus}
-            </span>
-            <button
-              type="button"
-              onClick={() => navigateToSection("contact")}
-              title="Mulai Kolaborasi"
-              className="w-8 h-8 rounded-full bg-primary flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-on-primary text-[18px]">
-                person
-              </span>
-            </button>
-          </div>
-        </header>
-
-        {/* Main Scrollable Canvas */}
-        <main className="w-full pt-16 bg-background min-h-screen">
-          <div className="flex flex-col w-full">
-            <div className="relative w-full max-w-6xl mx-auto px-space-lg pb-space-2xl space-y-space-2xl">
-              {/* SECTION 1: HERO / HOME (#home) */}
-              <section
-                className="relative pt-space-xl pb-space-lg overflow-hidden"
-                id="home"
-              >
-                <div className="absolute -top-12 -left-12 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="relative z-10 flex flex-col items-start gap-space-md">
-                  {/* Availability Banner */}
-                  <div className="inline-flex items-center gap-space-sm px-4 py-1.5 rounded-full bg-surface-card border border-border-subtle shadow-sm">
-                    <span className="material-symbols-outlined text-primary text-[16px]">
-                      verified
-                    </span>
-                    <span className="font-label-md text-label-md text-text-primary tracking-wide">
-                      {PROFILE_DATA.statusText}
-                    </span>
-                  </div>
-
-                  <div className="space-y-space-xs max-w-3xl">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-label-sm text-label-sm uppercase tracking-widest text-primary font-semibold">
-                        {PROFILE_DATA.heroKicker}
-                      </p>
-                      <span className="text-text-muted text-xs">·</span>
-                      <span
-                        className="font-mono text-xs text-secondary transition-opacity duration-300"
-                        aria-live="polite"
-                      >
-                        {PROFILE_DATA.rotatingRoles[roleIndex]}
+              <div className="mx-auto w-full max-w-5xl space-y-12">
+                {/* HOME */}
+                {activeSection === "home" && (
+                  <section
+                    className="page-enter flex min-h-[420px] flex-col items-center justify-center py-8 text-center lg:min-h-[calc(min(760px,100vh-4rem)-6rem)]"
+                    id="home"
+                  >
+                    <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border-subtle bg-surface-card px-4 py-1.5">
+                      <span className="material-symbols-outlined text-[16px] text-primary">
+                        verified
+                      </span>
+                      <span className="text-[12px] font-medium text-text-secondary">
+                        {PROFILE_DATA.statusText}
                       </span>
                     </div>
-                    <h2 className="font-display-hero text-display-hero text-text-primary tracking-tight leading-tight">
+                    <h2 className="text-[clamp(2.4rem,5.5vw,4rem)] font-semibold leading-[1.1] tracking-tight text-text-primary">
+                      {PROFILE_DATA.name}
+                    </h2>
+                    <p
+                      key={roleIndex}
+                      className="role-fade mt-3 min-h-[1.75rem] text-lg font-light text-text-muted"
+                      aria-live="polite"
+                    >
+                      {PROFILE_DATA.rotatingRoles[roleIndex]}
+                    </p>
+                    <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-text-secondary">
                       Membangun Ekosistem Digital{" "}
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary-container">
+                      <span className="font-semibold text-primary">
                         Manufaktur Cerdas
                       </span>{" "}
-                      &amp; Web Skala Enterprise
-                    </h2>
-                  </div>
-
-                  {/* Interactive Skill Filter Badges */}
-                  <div className="flex flex-wrap items-center gap-space-sm pt-space-xs">
-                    {PROFILE_DATA.heroBadges.map((badge) => (
-                      <button
-                        key={badge.label}
-                        type="button"
-                        onClick={() => {
-                          setPortfolioFilter(badge.filterTarget);
-                          navigateToSection("portfolio");
-                        }}
-                        className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-base border border-border-subtle hover:border-primary-container transition-colors cursor-pointer whitespace-nowrap"
-                      >
-                        <span className="material-symbols-outlined text-[18px] text-primary">
-                          {badge.icon}
-                        </span>
-                        <span className="font-label-md text-label-md text-text-secondary">
-                          {badge.label}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </section>
+                      &amp; Web Skala Enterprise.
+                    </p>
+                    <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                      {PROFILE_DATA.heroBadges.map((badge) => (
+                        <button
+                          key={badge.label}
+                          type="button"
+                          onClick={() => {
+                            setPortfolioFilter(badge.filterTarget);
+                            navigateToSection("portfolio");
+                          }}
+                          className="flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-full border border-border-subtle bg-surface-base px-3.5 py-1.5 transition-colors hover:border-primary-container"
+                        >
+                          <span className="material-symbols-outlined text-[18px] text-primary">
+                            {badge.icon}
+                          </span>
+                          <span className="font-label-md text-label-md text-text-secondary">
+                            {badge.label}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </section>
+                )}
 
               {/* SECTION 2: TENTANG SAYA (#about-me) */}
-              <section className="relative scroll-mt-24" id="about-me">
+              {activeSection === "about-me" && (
+              <div className="page-enter space-y-12">
+              <section className="relative" id="about-me">
                 <div className="flex items-center gap-space-sm mb-space-lg">
                   <span className="material-symbols-outlined text-primary text-[28px]">
                     badge
@@ -736,9 +546,12 @@ export default function App() {
                   ))}
                 </div>
               </section>
+              </div>
+              )}
 
               {/* SECTION 3: PENGALAMAN KERJA & RESUME (#resume) */}
-              <section className="relative scroll-mt-24" id="resume">
+              {activeSection === "resume" && (
+              <section className="page-enter relative" id="resume">
                 <div className="flex items-center gap-space-sm mb-space-lg">
                   <span className="material-symbols-outlined text-primary text-[28px]">
                     work_history
@@ -778,7 +591,7 @@ export default function App() {
                           <div
                             className={`absolute -left-[27px] top-1.5 w-3.5 h-3.5 rounded-full bg-surface-base border-2 transition-transform ${
                               exp.isCurrent
-                                ? "border-primary-container group-hover:scale-125 shadow-[0_0_8px_#00d2d3]"
+                                ? "border-primary-container group-hover:scale-125 shadow-[0_0_8px_#04b4e0]"
                                 : "border-outline-variant group-hover:border-primary-container"
                             }`}
                           />
@@ -905,7 +718,7 @@ export default function App() {
                             </div>
                             <div className="w-full h-2 rounded-full bg-surface-elevated overflow-hidden">
                               <div
-                                className="h-full bg-primary-container rounded-full shadow-[0_0_8px_#00d2d3]"
+                                className="h-full bg-primary-container rounded-full shadow-[0_0_8px_#04b4e0]"
                                 style={{ width: `${skill.percentage}%` }}
                               />
                             </div>
@@ -942,9 +755,11 @@ export default function App() {
                   </div>
                 </div>
               </section>
+              )}
 
               {/* SECTION 4: KARYA REKAYASA & STUDI KASUS (#portfolio) */}
-              <section className="relative scroll-mt-24" id="portfolio">
+              {activeSection === "portfolio" && (
+              <section className="page-enter relative" id="portfolio">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-lg">
                   <div>
                     <span className="font-label-sm text-label-sm text-primary uppercase tracking-widest font-semibold">
@@ -974,7 +789,7 @@ export default function App() {
                           onClick={() => setPortfolioFilter(tab.id)}
                           className={`px-4 py-1.5 rounded-full text-label-sm font-label-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                             active
-                              ? "bg-primary-container text-surface-base shadow-[0_0_12px_rgba(0,210,211,0.3)]"
+                              ? "bg-primary-container text-surface-base shadow-[0_0_12px_rgba(4,180,224,0.3)]"
                               : "text-text-muted hover:text-text-primary"
                           }`}
                         >
@@ -1035,9 +850,11 @@ export default function App() {
                   ))}
                 </div>
               </section>
+              )}
 
               {/* SECTION 5: CATATAN TEKNIS / TECHNICAL NOTES (#blog — PRD Section 3.5) */}
-              <section className="relative scroll-mt-24" id="blog">
+              {activeSection === "blog" && (
+              <section className="page-enter relative" id="blog">
                 <div className="flex items-center justify-between mb-space-lg">
                   <div className="flex items-center gap-space-sm flex-1">
                     <span className="material-symbols-outlined text-primary text-[28px]">
@@ -1095,9 +912,11 @@ export default function App() {
                   ))}
                 </div>
               </section>
+              )}
 
               {/* SECTION 6: MULAI KOLABORASI PROFESIONAL (#contact) */}
-              <section className="relative scroll-mt-24" id="contact">
+              {activeSection === "contact" && (
+              <section className="page-enter relative" id="contact">
                 <div className="flex items-center gap-space-sm mb-space-lg">
                   <span className="material-symbols-outlined text-primary text-[28px]">
                     contact_mail
@@ -1284,7 +1103,7 @@ export default function App() {
 
                       <button
                         type="submit"
-                        className="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-label-md flex items-center justify-center gap-2 shadow-[0_0_16px_rgba(0,210,211,0.35)] hover:bg-primary transition-all cursor-pointer"
+                        className="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-label-md flex items-center justify-center gap-2 shadow-[0_0_16px_rgba(4,180,224,0.35)] hover:bg-primary transition-all cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-[20px]">
                           {formSubmitted ? "done" : "send"}
@@ -1319,10 +1138,100 @@ export default function App() {
                   </div>
                 </div>
               </section>
+              )}
+              </div>
             </div>
+          </main>
+
+          {/* Right icon navigation (desktop) */}
+          <nav
+            aria-label="Navigasi Seksi Utama"
+            className="absolute -right-[94px] top-0 hidden w-[70px] flex-col items-center gap-1 rounded-full bg-[var(--nav-bg)] py-4 shadow-[var(--card-shadow)] transition-colors duration-300 lg:flex"
+          >
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  title={item.label}
+                  aria-label={item.label}
+                  aria-current={isActive ? "page" : undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateToSection(item.id);
+                  }}
+                  className={`group relative flex h-[50px] w-full items-center justify-center transition-colors ${
+                    isActive
+                      ? "text-[#04b4e0]"
+                      : "text-text-muted hover:text-[#04b4e0]"
+                  }`}
+                >
+                  <span className="material-symbols-outlined icon-thin text-[32px]">
+                    {item.icon}
+                  </span>
+                  <span className="pointer-events-none absolute right-[76px] origin-right scale-0 whitespace-nowrap rounded-full bg-[var(--nav-bg)] px-3 py-1 text-[12px] font-medium text-text-primary shadow-lg transition-transform group-hover:scale-100">
+                    {item.label}
+                  </span>
+                </a>
+              );
+            })}
+          </nav>
+
+          {/* Prev / next arrows (desktop) */}
+          <div className="absolute -right-[84px] bottom-0 hidden w-[60px] flex-col items-center rounded-full bg-[var(--nav-bg)] py-2 shadow-[var(--card-shadow)] transition-colors duration-300 lg:flex">
+            <button
+              type="button"
+              aria-label="Halaman berikutnya"
+              onClick={() => goRelative(1)}
+              className="flex h-12 w-full cursor-pointer items-center justify-center text-text-muted transition-colors hover:text-[#04b4e0]"
+            >
+              <span className="material-symbols-outlined icon-thin text-[34px]">
+                chevron_right
+              </span>
+            </button>
+            <button
+              type="button"
+              aria-label="Halaman sebelumnya"
+              onClick={() => goRelative(-1)}
+              className="flex h-12 w-full cursor-pointer items-center justify-center text-text-muted transition-colors hover:text-[#04b4e0]"
+            >
+              <span className="material-symbols-outlined icon-thin text-[34px]">
+                chevron_left
+              </span>
+            </button>
           </div>
-        </main>
+        </div>
       </div>
+
+      {/* Bottom navigation (mobile / tablet) */}
+      <nav
+        aria-label="Navigasi Seksi Utama"
+        className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-around rounded-full bg-[var(--nav-bg)] px-2 py-1 shadow-[var(--card-shadow)] lg:hidden"
+      >
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeSection === item.id;
+          return (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              onClick={(e) => {
+                e.preventDefault();
+                navigateToSection(item.id);
+              }}
+              className={`flex h-12 w-12 items-center justify-center transition-colors ${
+                isActive ? "text-[#04b4e0]" : "text-text-muted"
+              }`}
+            >
+              <span className="material-symbols-outlined icon-thin text-[28px]">
+                {item.icon}
+              </span>
+            </a>
+          );
+        })}
+      </nav>
 
       {/* Case Study Detail Modal */}
       <CaseStudyModal

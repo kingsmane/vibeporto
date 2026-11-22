@@ -84,18 +84,112 @@
   --font-mono: "JetBrains Mono", monospace;
 }
 
+/* ------------------------------------------------------------------
+ * Two colour themes (BreezyCV style). Switched via <html data-theme>.
+ * Overrides the semantic tokens declared in @theme above.
+ * ------------------------------------------------------------------ */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --page-bg: #04b4e0;
+  --page-dot: #ffffff;
+  --nav-bg: #454545;
+  --page-deco: rgba(255, 255, 255, 0.16);
+  --sidebar-bg: #454545;
+  --card-shadow: 0 30px 70px -20px rgba(0, 60, 90, 0.55);
+
+  --color-background: #222222;
+  --color-surface-base: #222222;
+  --color-surface-card: #2c2c2c;
+  --color-surface-elevated: #383838;
+  --color-border-subtle: #3d3d3d;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #d6d6d6;
+  --color-text-muted: #9a9a9a;
+  --color-on-surface: #e8e8e8;
+  --color-on-surface-variant: #b5b5b5;
+  --color-outline: #7d7d7d;
+  --color-primary: #2cc6ee;
+  --color-primary-container: #04b4e0;
+  --color-secondary: #7fdcf6;
+  --color-secondary-container: #04b4e0;
+  --color-secondary-fixed: #a8e8fa;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #ffffff;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --page-bg: #f1f5f8;
+  --page-dot: rgba(4, 180, 224, 0.18);
+  --nav-bg: #ffffff;
+  --page-deco: rgba(4, 180, 224, 0.1);
+  --sidebar-bg: #04b4e0;
+  --card-shadow: 0 30px 70px -25px rgba(30, 60, 90, 0.35);
+
+  --color-background: #ffffff;
+  --color-surface-base: #ffffff;
+  --color-surface-card: #f4f8fa;
+  --color-surface-elevated: #e6eef3;
+  --color-border-subtle: #e1e8ed;
+  --color-text-primary: #222222;
+  --color-text-secondary: #4a5258;
+  --color-text-muted: #7b858c;
+  --color-on-surface: #222222;
+  --color-on-surface-variant: #5b656c;
+  --color-outline: #9aa5ac;
+  --color-primary: #0397bd;
+  --color-primary-container: #04b4e0;
+  --color-secondary: #0288a8;
+  --color-secondary-container: #04b4e0;
+  --color-secondary-fixed: #0399bf;
+  --color-on-primary: #ffffff;
+  --color-on-primary-fixed: #ffffff;
+}
+
 @layer base {
   html,
   body {
     margin: 0;
     padding: 0;
-    background-color: #131313;
-    color: #e5e2e1;
+    background-color: var(--page-bg);
+    color: var(--color-text-primary);
+    font-family: "Poppins", "Inter", sans-serif;
   }
 
   body {
     overscroll-behavior: none;
   }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.45s ease-out both;
+}
+
+@keyframes role-fade {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.role-fade {
+  animation: role-fade 0.4s ease-out both;
 }
 
 /* Custom typography helper classes matching code_2304b432.html */
@@ -169,12 +263,16 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #1b1b1b;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #333333;
+  background: var(--color-border-subtle);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00d2d3;
+  background: #04b4e0;
+}
+
+.icon-thin {
+  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 40;
 }

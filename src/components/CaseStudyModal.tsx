@@ -277,7 +277,7 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
               onInquireProject(project.title);
               onClose();
             }}
-            className="px-5 py-2.5 rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-xs flex items-center gap-1.5 shadow-[0_0_14px_rgba(0,210,211,0.3)] hover:bg-primary transition-all cursor-pointer"
+            className="px-5 py-2.5 rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-xs flex items-center gap-1.5 shadow-[0_0_14px_rgba(4,180,224,0.3)] hover:bg-primary transition-all cursor-pointer"
           >
             <span className="material-symbols-outlined text-[16px]">send</span>
             <span>Diskusikan Sistem Serupa</span>
