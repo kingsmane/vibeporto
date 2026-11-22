@@ -71,11 +71,11 @@ export interface TechnicalNoteItem {
 }
 
 export const PROFILE_DATA = {
-  name: 'Arga Pratama, S.Kom.',
+  name: 'Herman Sadi',
   title: 'Full-Stack Developer & Manufacturing IT Specialist',
   statusText: 'Tersedia untuk Peluang Penuh & Konsultasi IT (Open to Work)',
   headerStatus: 'Available for MES & Full-Stack Projects',
-  heroKicker: 'Portofolio Profesional Arga Pratama, S.Kom.',
+  heroKicker: 'Portofolio Profesional Herman Sadi',
   rotatingRoles: [
     'Full-Stack Web Developer',
     'Manufacturing & PPIC System Specialist',
