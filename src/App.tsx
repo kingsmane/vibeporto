@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from 'react';
-import { CaseStudyModal } from './components/CaseStudyModal';
-import { ProjectThumbnail } from './components/ProjectVisual';
-import { TechNoteModal } from './components/TechNoteModal';
+import React, { useEffect, useState } from "react";
+import { CaseStudyModal } from "./components/CaseStudyModal";
+import { ProjectThumbnail } from "./components/ProjectVisual";
+import { TechNoteModal } from "./components/TechNoteModal";
 import {
   CERTIFICATES_DATA,
   DOMAIN_TAGS_DATA,
@@ -19,37 +19,49 @@ import {
   SKILLS_PROGRESS_DATA,
   TECHNICAL_NOTES_DATA,
   TechnicalNoteItem,
-} from './data/portfolioData';
-import { downloadCompleteCvPdf } from './utils/cvGenerator';
+} from "./data/portfolioData";
+import { downloadCompleteCvPdf } from "./utils/cvGenerator";
 
-type NavSectionId = 'home' | 'about-me' | 'resume' | 'portfolio' | 'blog' | 'contact';
-type PortfolioCategory = 'all' | 'manufacturing' | 'web' | 'iot';
+type NavSectionId =
+  | "home"
+  | "about-me"
+  | "resume"
+  | "portfolio"
+  | "blog"
+  | "contact";
+type PortfolioCategory = "all" | "manufacturing" | "web" | "iot";
 
 const NAV_ITEMS: { id: NavSectionId; label: string; icon: string }[] = [
-  { id: 'home', label: 'Home', icon: 'home' },
-  { id: 'about-me', label: 'About Me', icon: 'person' },
-  { id: 'resume', label: 'Resume', icon: 'description' },
-  { id: 'portfolio', label: 'Portfolio', icon: 'precision_manufacturing' },
-  { id: 'blog', label: 'Technical Notes', icon: 'article' },
-  { id: 'contact', label: 'Contact', icon: 'mail' },
+  { id: "home", label: "Home", icon: "home" },
+  { id: "about-me", label: "About Me", icon: "person" },
+  { id: "resume", label: "Resume", icon: "description" },
+  { id: "portfolio", label: "Portfolio", icon: "precision_manufacturing" },
+  { id: "blog", label: "Technical Notes", icon: "article" },
+  { id: "contact", label: "Contact", icon: "mail" },
 ];
 
 export default function App() {
-  const [activeSection, setActiveSection] = useState<NavSectionId>('home');
-  const [portfolioFilter, setPortfolioFilter] = useState<PortfolioCategory>('all');
-  const [selectedProject, setSelectedProject] = useState<ProjectCaseStudy | null>(null);
-  const [selectedNote, setSelectedNote] = useState<TechnicalNoteItem | null>(null);
+  const [activeSection, setActiveSection] = useState<NavSectionId>("home");
+  const [portfolioFilter, setPortfolioFilter] =
+    useState<PortfolioCategory>("all");
+  const [selectedProject, setSelectedProject] =
+    useState<ProjectCaseStudy | null>(null);
+  const [selectedNote, setSelectedNote] = useState<TechnicalNoteItem | null>(
+    null,
+  );
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
   const [cvDownloadedToast, setCvDownloadedToast] = useState(false);
-  const [selectedDomainTag, setSelectedDomainTag] = useState<string>('PPIC & Material Planning');
+  const [selectedDomainTag, setSelectedDomainTag] = useState<string>(
+    "PPIC & Material Planning",
+  );
   const [showEducationInResume, setShowEducationInResume] = useState(false);
 
   // Contact form state
-  const [formName, setFormName] = useState('');
-  const [formEmail, setFormEmail] = useState('');
-  const [formSubject, setFormSubject] = useState('');
-  const [formMessage, setFormMessage] = useState('');
+  const [formName, setFormName] = useState("");
+  const [formEmail, setFormEmail] = useState("");
+  const [formSubject, setFormSubject] = useState("");
+  const [formMessage, setFormMessage] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submittedMessagesCount, setSubmittedMessagesCount] = useState(0);
 
@@ -64,20 +76,20 @@ export default function App() {
   // Scroll spy & hash sync
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '') as NavSectionId;
+      const hash = window.location.hash.replace("#", "") as NavSectionId;
       if (NAV_ITEMS.some((item) => item.id === hash)) {
         setActiveSection(hash);
       }
     };
     handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
   useEffect(() => {
-    const sectionElements = NAV_ITEMS.map((item) => document.getElementById(item.id)).filter(
-      Boolean
-    ) as HTMLElement[];
+    const sectionElements = NAV_ITEMS.map((item) =>
+      document.getElementById(item.id),
+    ).filter(Boolean) as HTMLElement[];
 
     if (sectionElements.length === 0) return;
 
@@ -92,9 +104,9 @@ export default function App() {
         }
       },
       {
-        rootMargin: '-20% 0px -55% 0px',
+        rootMargin: "-20% 0px -55% 0px",
         threshold: [0.1, 0.25, 0.5],
-      }
+      },
     );
 
     sectionElements.forEach((el) => observer.observe(el));
@@ -106,8 +118,8 @@ export default function App() {
     setMobileDrawerOpen(false);
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      window.history.replaceState(null, '', `#${id}`);
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", `#${id}`);
     }
   };
 
@@ -121,15 +133,20 @@ export default function App() {
   const handleInquireProject = (projectTitle: string) => {
     setFormSubject(`Diskusi Proyek: ${projectTitle}`);
     setFormMessage(
-      `Halo Arga, saya tertarik mendiskusikan implementasi sistem serupa dengan "${projectTitle}" untuk kebutuhan perusahaan kami.`
+      `Halo Arga, saya tertarik mendiskusikan implementasi sistem serupa dengan "${projectTitle}" untuk kebutuhan perusahaan kami.`,
     );
     setFormSubmitted(false);
-    navigateToSection('contact');
+    navigateToSection("contact");
   };
 
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formName.trim() || !formEmail.trim() || !formSubject.trim() || !formMessage.trim()) {
+    if (
+      !formName.trim() ||
+      !formEmail.trim() ||
+      !formSubject.trim() ||
+      !formMessage.trim()
+    ) {
       return;
     }
     setFormSubmitted(true);
@@ -137,15 +154,15 @@ export default function App() {
   };
 
   const handleResetContactForm = () => {
-    setFormName('');
-    setFormEmail('');
-    setFormSubject('');
-    setFormMessage('');
+    setFormName("");
+    setFormEmail("");
+    setFormSubject("");
+    setFormMessage("");
     setFormSubmitted(false);
   };
 
   const filteredProjects = PORTFOLIO_PROJECTS.filter((project) =>
-    portfolioFilter === 'all' ? true : project.category === portfolioFilter
+    portfolioFilter === "all" ? true : project.category === portfolioFilter,
   );
 
   return (
@@ -157,7 +174,9 @@ export default function App() {
           <div className="relative mb-space-md">
             <div className="w-28 h-28 rounded-full bg-surface-elevated p-1 ring-2 ring-primary-container/30 flex items-center justify-center">
               <div className="w-full h-full rounded-full bg-surface-card flex items-center justify-center overflow-hidden">
-                <span className="material-symbols-outlined text-primary text-[54px]">person</span>
+                <span className="material-symbols-outlined text-primary text-[54px]">
+                  person
+                </span>
               </div>
             </div>
             <div
@@ -183,7 +202,9 @@ export default function App() {
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
             >
-              <span className="material-symbols-outlined text-[20px]">terminal</span>
+              <span className="material-symbols-outlined text-[20px]">
+                terminal
+              </span>
             </a>
             <a
               aria-label="Professional Network (LinkedIn)"
@@ -203,7 +224,9 @@ export default function App() {
               rel="noopener noreferrer"
               className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
             >
-              <span className="material-symbols-outlined text-[20px]">chat</span>
+              <span className="material-symbols-outlined text-[20px]">
+                chat
+              </span>
             </a>
             <a
               aria-label="Email Inquiry"
@@ -211,11 +234,13 @@ export default function App() {
               href="#contact"
               onClick={(e) => {
                 e.preventDefault();
-                navigateToSection('contact');
+                navigateToSection("contact");
               }}
               className="w-10 h-10 rounded-full bg-surface-card flex items-center justify-center text-on-surface-variant hover:bg-surface-elevated hover:text-primary transition-colors"
             >
-              <span className="material-symbols-outlined text-[20px]">mail</span>
+              <span className="material-symbols-outlined text-[20px]">
+                mail
+              </span>
             </a>
           </div>
 
@@ -223,15 +248,21 @@ export default function App() {
           <div className="w-full mt-space-lg pt-space-md border-t border-border-subtle/70 text-left space-y-2.5">
             <div className="flex items-center justify-between text-xs">
               <span className="text-text-muted">Pengalaman</span>
-              <span className="font-mono text-text-primary font-semibold tabular-nums">8+ Tahun</span>
+              <span className="font-mono text-text-primary font-semibold tabular-nums">
+                8+ Tahun
+              </span>
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-text-muted">Sistem Produksi</span>
-              <span className="font-mono text-primary font-semibold tabular-nums">14+ Terdeploy</span>
+              <span className="font-mono text-primary font-semibold tabular-nums">
+                14+ Terdeploy
+              </span>
             </div>
             <div className="flex items-center justify-between text-xs">
               <span className="text-text-muted">Domisili</span>
-              <span className="text-text-secondary">Indonesia (Remote/On-Site)</span>
+              <span className="text-text-secondary">
+                Indonesia (Remote/On-Site)
+              </span>
             </div>
           </div>
         </div>
@@ -243,7 +274,9 @@ export default function App() {
             onClick={handleDownloadCv}
             className="w-full py-3 px-space-md rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-label-md flex items-center justify-center gap-space-xs shadow-[0_0_16px_rgba(0,210,211,0.35)] hover:bg-primary transition-all cursor-pointer whitespace-nowrap"
           >
-            <span className="material-symbols-outlined text-[18px]">download</span>
+            <span className="material-symbols-outlined text-[18px]">
+              download
+            </span>
             <span>Unduh CV Lengkap (PDF)</span>
           </button>
           {cvDownloadedToast && (
@@ -253,7 +286,7 @@ export default function App() {
           )}
           <div className="text-center">
             <p className="font-body-sm text-body-sm text-text-muted">
-              © {PROFILE_DATA.copyrightYear} Arga Pratama. All rights reserved.
+              © {PROFILE_DATA.copyrightYear} Heerman Sadi. All rights reserved.
             </p>
           </div>
         </div>
@@ -280,7 +313,9 @@ export default function App() {
                   aria-label="Tutup menu"
                   className="w-9 h-9 rounded-full bg-surface-card text-text-secondary flex items-center justify-center"
                 >
-                  <span className="material-symbols-outlined text-[20px]">close</span>
+                  <span className="material-symbols-outlined text-[20px]">
+                    close
+                  </span>
                 </button>
               </div>
 
@@ -295,7 +330,9 @@ export default function App() {
                 <h2 className="font-headline-sm text-headline-sm text-text-primary">
                   {PROFILE_DATA.name}
                 </h2>
-                <p className="text-xs text-primary mt-1">{PROFILE_DATA.title}</p>
+                <p className="text-xs text-primary mt-1">
+                  {PROFILE_DATA.title}
+                </p>
               </div>
 
               <nav className="mt-space-lg space-y-1.5">
@@ -311,11 +348,13 @@ export default function App() {
                       }}
                       className={`flex items-center gap-3 px-4 py-2.5 rounded-xl font-label-md text-label-md transition-colors ${
                         isActive
-                          ? 'bg-primary-container text-on-primary-fixed font-semibold'
-                          : 'text-text-secondary hover:bg-surface-card hover:text-text-primary'
+                          ? "bg-primary-container text-on-primary-fixed font-semibold"
+                          : "text-text-secondary hover:bg-surface-card hover:text-text-primary"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                      <span className="material-symbols-outlined text-[20px]">
+                        {item.icon}
+                      </span>
                       <span>{item.label}</span>
                     </a>
                   );
@@ -329,11 +368,13 @@ export default function App() {
                 onClick={handleDownloadCv}
                 className="w-full py-3 px-4 rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-xs flex items-center justify-center gap-2 shadow-[0_0_16px_rgba(0,210,211,0.35)]"
               >
-                <span className="material-symbols-outlined text-[18px]">download</span>
+                <span className="material-symbols-outlined text-[18px]">
+                  download
+                </span>
                 <span>Unduh CV Lengkap (PDF)</span>
               </button>
               <p className="text-center font-body-sm text-body-sm text-text-muted">
-                © {PROFILE_DATA.copyrightYear} Arga Pratama
+                © {PROFILE_DATA.copyrightYear} Herman Sadi
               </p>
             </div>
           </div>
@@ -352,18 +393,20 @@ export default function App() {
               key={item.id}
               href={`#${item.id}`}
               title={item.label}
-              aria-current={isActive ? 'page' : undefined}
+              aria-current={isActive ? "page" : undefined}
               onClick={(e) => {
                 e.preventDefault();
                 navigateToSection(item.id);
               }}
               className={`group relative flex items-center justify-center w-12 h-12 rounded-full transition-all ${
                 isActive
-                  ? 'bg-primary-container text-on-primary-fixed shadow-[0_0_16px_rgba(0,210,211,0.35)]'
-                  : 'text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface'
+                  ? "bg-primary-container text-on-primary-fixed shadow-[0_0_16px_rgba(0,210,211,0.35)]"
+                  : "text-on-surface-variant hover:bg-surface-elevated hover:text-on-surface"
               }`}
             >
-              <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
+              <span className="material-symbols-outlined text-[22px]">
+                {item.icon}
+              </span>
               <span className="absolute right-14 scale-0 group-hover:scale-100 transition-all origin-right bg-surface-elevated text-text-primary font-label-sm text-label-sm py-1 px-3 rounded-full shadow-lg pointer-events-none whitespace-nowrap border border-border-subtle">
                 {item.label}
               </span>
@@ -384,17 +427,19 @@ export default function App() {
               aria-label="Buka menu navigasi"
               className="lg:hidden w-10 h-10 rounded-lg bg-surface-card border border-border-subtle flex items-center justify-center text-text-primary"
             >
-              <span className="material-symbols-outlined text-[22px]">menu</span>
+              <span className="material-symbols-outlined text-[22px]">
+                menu
+              </span>
             </button>
             <a
               href="#home"
               onClick={(e) => {
                 e.preventDefault();
-                navigateToSection('home');
+                navigateToSection("home");
               }}
               className="font-headline-sm text-sm text-text-primary tracking-tight whitespace-nowrap shrink-0 lg:hidden"
             >
-              Arga Pratama, S.Kom.
+              Herman Sadi
             </a>
             <div className="hidden lg:flex items-center gap-6 text-xs font-medium text-text-muted">
               {NAV_ITEMS.map((item) => (
@@ -407,8 +452,8 @@ export default function App() {
                   }}
                   className={`transition-colors whitespace-nowrap shrink-0 ${
                     activeSection === item.id
-                      ? 'text-primary font-semibold'
-                      : 'hover:text-text-primary'
+                      ? "text-primary font-semibold"
+                      : "hover:text-text-primary"
                   }`}
                 >
                   {item.label}
@@ -424,11 +469,13 @@ export default function App() {
             </span>
             <button
               type="button"
-              onClick={() => navigateToSection('contact')}
+              onClick={() => navigateToSection("contact")}
               title="Mulai Kolaborasi"
               className="w-8 h-8 rounded-full bg-primary flex items-center justify-center hover:scale-105 transition-transform cursor-pointer"
             >
-              <span className="material-symbols-outlined text-on-primary text-[18px]">person</span>
+              <span className="material-symbols-outlined text-on-primary text-[18px]">
+                person
+              </span>
             </button>
           </div>
         </header>
@@ -438,7 +485,10 @@ export default function App() {
           <div className="flex flex-col w-full">
             <div className="relative w-full max-w-6xl mx-auto px-space-lg pb-space-2xl space-y-space-2xl">
               {/* SECTION 1: HERO / HOME (#home) */}
-              <section className="relative pt-space-xl pb-space-lg overflow-hidden" id="home">
+              <section
+                className="relative pt-space-xl pb-space-lg overflow-hidden"
+                id="home"
+              >
                 <div className="absolute -top-12 -left-12 w-96 h-96 bg-primary-container/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex flex-col items-start gap-space-md">
                   {/* Availability Banner */}
@@ -465,10 +515,10 @@ export default function App() {
                       </span>
                     </div>
                     <h2 className="font-display-hero text-display-hero text-text-primary tracking-tight leading-tight">
-                      Membangun Ekosistem Digital{' '}
+                      Membangun Ekosistem Digital{" "}
                       <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary-container">
                         Manufaktur Cerdas
-                      </span>{' '}
+                      </span>{" "}
                       &amp; Web Skala Enterprise
                     </h2>
                   </div>
@@ -481,7 +531,7 @@ export default function App() {
                         type="button"
                         onClick={() => {
                           setPortfolioFilter(badge.filterTarget);
-                          navigateToSection('portfolio');
+                          navigateToSection("portfolio");
                         }}
                         className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-base border border-border-subtle hover:border-primary-container transition-colors cursor-pointer whitespace-nowrap"
                       >
@@ -500,7 +550,9 @@ export default function App() {
               {/* SECTION 2: TENTANG SAYA (#about-me) */}
               <section className="relative scroll-mt-24" id="about-me">
                 <div className="flex items-center gap-space-sm mb-space-lg">
-                  <span className="material-symbols-outlined text-primary text-[28px]">badge</span>
+                  <span className="material-symbols-outlined text-primary text-[28px]">
+                    badge
+                  </span>
                   <h3 className="font-headline-lg text-headline-lg text-text-primary">
                     Tentang Saya
                   </h3>
@@ -512,22 +564,26 @@ export default function App() {
                   <div className="col-span-12 lg:col-span-7 flex flex-col justify-between bg-surface-base p-space-lg rounded-xl border border-border-subtle shadow-md">
                     <div className="space-y-space-md">
                       <div className="inline-flex items-center gap-2 text-primary font-label-md text-label-md uppercase tracking-wider">
-                        <span className="material-symbols-outlined text-[16px]">verified</span>
+                        <span className="material-symbols-outlined text-[16px]">
+                          verified
+                        </span>
                         <span>Ringkasan Eksekutif</span>
                       </div>
                       <p className="font-body-lg text-body-lg text-text-secondary leading-relaxed">
-                        Profesional rekayasa perangkat lunak dengan pengalaman{' '}
-                        <strong className="text-text-primary">8+ tahun</strong> memimpin
-                        transformasi digital sektor manufaktur, otomasi pabrik, dan sistem
-                        enterprise terdistribusi. Berfokus pada digitalisasi lini produksi
-                        shop-floor, sistem PPIC terintegrasi, pelacakan WIP real-time, reduksi
-                        cycle time, hingga implementasi telemetri OEE industri.
+                        Profesional rekayasa perangkat lunak dengan pengalaman{" "}
+                        <strong className="text-text-primary">8+ tahun</strong>{" "}
+                        memimpin transformasi digital sektor manufaktur, otomasi
+                        pabrik, dan sistem enterprise terdistribusi. Berfokus
+                        pada digitalisasi lini produksi shop-floor, sistem PPIC
+                        terintegrasi, pelacakan WIP real-time, reduksi cycle
+                        time, hingga implementasi telemetri OEE industri.
                       </p>
                       <p className="font-body-md text-body-md text-text-muted leading-relaxed">
-                        Menguasai arsitektur backend berkinerja tinggi, perancangan ERD kompleks
-                        berkecepatan tinggi, container orchestration Docker, serta hardening
-                        infrastruktur Linux Server dengan reliabilitas tinggi untuk operasional 24/7
-                        tanpa henti.
+                        Menguasai arsitektur backend berkinerja tinggi,
+                        perancangan ERD kompleks berkecepatan tinggi, container
+                        orchestration Docker, serta hardening infrastruktur
+                        Linux Server dengan reliabilitas tinggi untuk
+                        operasional 24/7 tanpa henti.
                       </p>
                     </div>
 
@@ -572,7 +628,9 @@ export default function App() {
                   <div className="col-span-12 lg:col-span-5 flex flex-col gap-space-md">
                     <div className="flex-1 bg-surface-card p-space-lg rounded-xl border border-border-subtle hover:border-primary/50 transition-all flex items-center gap-space-md group">
                       <div className="w-16 h-16 rounded-xl bg-surface-elevated flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
-                        <span className="material-symbols-outlined text-[32px]">inventory_2</span>
+                        <span className="material-symbols-outlined text-[32px]">
+                          inventory_2
+                        </span>
                       </div>
                       <div>
                         <div className="font-display-hero text-headline-lg font-extrabold text-text-primary tabular-nums">
@@ -589,7 +647,9 @@ export default function App() {
 
                     <div className="flex-1 bg-surface-card p-space-lg rounded-xl border border-border-subtle hover:border-primary/50 transition-all flex items-center gap-space-md group">
                       <div className="w-16 h-16 rounded-xl bg-surface-elevated flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
-                        <span className="material-symbols-outlined text-[32px]">history_edu</span>
+                        <span className="material-symbols-outlined text-[32px]">
+                          history_edu
+                        </span>
                       </div>
                       <div>
                         <div className="font-display-hero text-headline-lg font-extrabold text-text-primary tabular-nums">
@@ -606,7 +666,9 @@ export default function App() {
 
                     <div className="flex-1 bg-surface-card p-space-lg rounded-xl border border-border-subtle hover:border-primary/50 transition-all flex items-center gap-space-md group">
                       <div className="w-16 h-16 rounded-xl bg-surface-elevated flex items-center justify-center text-primary group-hover:scale-105 transition-transform shrink-0">
-                        <span className="material-symbols-outlined text-[32px]">bolt</span>
+                        <span className="material-symbols-outlined text-[32px]">
+                          bolt
+                        </span>
                       </div>
                       <div>
                         <div className="font-display-hero text-headline-lg font-extrabold text-primary tabular-nums">
@@ -636,8 +698,8 @@ export default function App() {
                     </h3>
                   </div>
                   <p className="font-body-md text-body-md text-text-muted max-w-md text-right hidden sm:block">
-                    Solusi terintegrasi menggabungkan software modern dengan kebutuhan nyata shop
-                    floor manufaktur.
+                    Solusi terintegrasi menggabungkan software modern dengan
+                    kebutuhan nyata shop floor manufaktur.
                   </p>
                 </div>
 
@@ -699,12 +761,14 @@ export default function App() {
                       </h4>
                       <button
                         type="button"
-                        onClick={() => setShowEducationInResume((prev) => !prev)}
+                        onClick={() =>
+                          setShowEducationInResume((prev) => !prev)
+                        }
                         className="text-xs font-mono text-primary hover:underline cursor-pointer"
                       >
                         {showEducationInResume
-                          ? 'Sembunyikan Detail Pendidikan'
-                          : '+ Tampilkan Pendidikan Formal'}
+                          ? "Sembunyikan Detail Pendidikan"
+                          : "+ Tampilkan Pendidikan Formal"}
                       </button>
                     </div>
 
@@ -714,8 +778,8 @@ export default function App() {
                           <div
                             className={`absolute -left-[27px] top-1.5 w-3.5 h-3.5 rounded-full bg-surface-base border-2 transition-transform ${
                               exp.isCurrent
-                                ? 'border-primary-container group-hover:scale-125 shadow-[0_0_8px_#00d2d3]'
-                                : 'border-outline-variant group-hover:border-primary-container'
+                                ? "border-primary-container group-hover:scale-125 shadow-[0_0_8px_#00d2d3]"
+                                : "border-outline-variant group-hover:border-primary-container"
                             }`}
                           />
                           <div className="bg-surface-card p-space-md rounded-xl border border-border-subtle hover:border-primary-container/50 transition-colors">
@@ -726,8 +790,8 @@ export default function App() {
                               <span
                                 className={`font-label-sm text-label-sm px-2.5 py-0.5 rounded-full ${
                                   exp.isCurrent
-                                    ? 'bg-primary-container/10 text-primary border border-primary-container/20'
-                                    : 'bg-surface-elevated text-text-muted'
+                                    ? "bg-primary-container/10 text-primary border border-primary-container/20"
+                                    : "bg-surface-elevated text-text-muted"
                                 }`}
                               >
                                 {exp.period}
@@ -735,11 +799,11 @@ export default function App() {
                             </div>
                             <p
                               className={`font-label-md text-label-md font-medium mb-space-xs ${
-                                exp.companyColor === 'primary'
-                                  ? 'text-primary'
-                                  : exp.companyColor === 'secondary'
-                                  ? 'text-secondary'
-                                  : 'text-text-secondary'
+                                exp.companyColor === "primary"
+                                  ? "text-primary"
+                                  : exp.companyColor === "secondary"
+                                    ? "text-secondary"
+                                    : "text-text-secondary"
                               }`}
                             >
                               {exp.company}
@@ -770,12 +834,16 @@ export default function App() {
                               <span className="font-headline-sm text-sm text-text-primary">
                                 {edu.degree}
                               </span>
-                              <span className="font-mono text-xs text-primary">{edu.period}</span>
+                              <span className="font-mono text-xs text-primary">
+                                {edu.period}
+                              </span>
                             </div>
                             <div className="text-xs text-secondary font-medium mt-0.5">
                               {edu.institution} · {edu.gpa}
                             </div>
-                            <p className="text-body-sm text-text-muted mt-1">{edu.focus}</p>
+                            <p className="text-body-sm text-text-muted mt-1">
+                              {edu.focus}
+                            </p>
                           </div>
                         ))}
                       </div>
@@ -861,8 +929,8 @@ export default function App() {
                               onClick={() => setSelectedDomainTag(tag.label)}
                               className={`px-3 py-1.5 rounded-full bg-surface-card border font-label-md text-label-sm transition-colors cursor-pointer ${
                                 isSelected || tag.highlighted
-                                  ? 'border-primary/40 text-primary'
-                                  : 'border-border-subtle text-text-secondary hover:border-primary/50'
+                                  ? "border-primary/40 text-primary"
+                                  : "border-border-subtle text-text-secondary hover:border-primary/50"
                               }`}
                             >
                               {tag.label}
@@ -890,10 +958,13 @@ export default function App() {
                   {/* Interactive Filter Tabs */}
                   <div className="flex items-center gap-2 p-1 bg-surface-card rounded-full border border-border-subtle self-start md:self-auto overflow-x-auto">
                     {[
-                      { id: 'all' as const, label: 'Semua' },
-                      { id: 'manufacturing' as const, label: 'Enterprise & PPIC' },
-                      { id: 'web' as const, label: 'Web Applications' },
-                      { id: 'iot' as const, label: 'Otomasi & IoT' },
+                      { id: "all" as const, label: "Semua" },
+                      {
+                        id: "manufacturing" as const,
+                        label: "Enterprise & PPIC",
+                      },
+                      { id: "web" as const, label: "Web Applications" },
+                      { id: "iot" as const, label: "Otomasi & IoT" },
                     ].map((tab) => {
                       const active = portfolioFilter === tab.id;
                       return (
@@ -903,8 +974,8 @@ export default function App() {
                           onClick={() => setPortfolioFilter(tab.id)}
                           className={`px-4 py-1.5 rounded-full text-label-sm font-label-md transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                             active
-                              ? 'bg-primary-container text-surface-base shadow-[0_0_12px_rgba(0,210,211,0.3)]'
-                              : 'text-text-muted hover:text-text-primary'
+                              ? "bg-primary-container text-surface-base shadow-[0_0_12px_rgba(0,210,211,0.3)]"
+                              : "text-text-muted hover:text-text-primary"
                           }`}
                         >
                           {tab.label}
@@ -992,7 +1063,9 @@ export default function App() {
                           <span className="text-text-muted">·</span>
                           <span className="text-text-muted">{note.date}</span>
                           <span className="text-text-muted">·</span>
-                          <span className="text-text-muted">{note.readTime}</span>
+                          <span className="text-text-muted">
+                            {note.readTime}
+                          </span>
                         </div>
                         <h4 className="font-headline-md text-headline-sm text-text-primary group-hover:text-primary transition-colors mb-2">
                           {note.title}
@@ -1040,9 +1113,10 @@ export default function App() {
                   <div className="col-span-12 lg:col-span-5 flex flex-col justify-between space-y-space-md">
                     <div className="space-y-space-md">
                       <p className="font-body-lg text-body-lg text-text-secondary leading-relaxed">
-                        Tertarik mendiskusikan kebutuhan arsitektur sistem enterprise, konsultasi
-                        digitalisasi manufaktur, atau peluang rekrutmen engineering? Silakan hubungi
-                        saya melalui form atau saluran langsung berikut.
+                        Tertarik mendiskusikan kebutuhan arsitektur sistem
+                        enterprise, konsultasi digitalisasi manufaktur, atau
+                        peluang rekrutmen engineering? Silakan hubungi saya
+                        melalui form atau saluran langsung berikut.
                       </p>
 
                       <div className="space-y-space-sm pt-space-xs">
@@ -1069,7 +1143,9 @@ export default function App() {
                           className="flex items-center gap-4 p-space-md rounded-xl bg-surface-card border border-border-subtle hover:border-primary/50 transition-colors"
                         >
                           <div className="w-12 h-12 rounded-lg bg-surface-elevated flex items-center justify-center text-primary flex-shrink-0">
-                            <span className="material-symbols-outlined text-[24px]">call</span>
+                            <span className="material-symbols-outlined text-[24px]">
+                              call
+                            </span>
                           </div>
                           <div>
                             <div className="font-label-sm text-label-sm text-text-muted uppercase">
@@ -1086,7 +1162,9 @@ export default function App() {
                           className="flex items-center gap-4 p-space-md rounded-xl bg-surface-card border border-border-subtle hover:border-primary/50 transition-colors"
                         >
                           <div className="w-12 h-12 rounded-lg bg-surface-elevated flex items-center justify-center text-primary flex-shrink-0">
-                            <span className="material-symbols-outlined text-[24px]">mail</span>
+                            <span className="material-symbols-outlined text-[24px]">
+                              mail
+                            </span>
                           </div>
                           <div>
                             <div className="font-label-sm text-label-sm text-text-muted uppercase">
@@ -1105,7 +1183,8 @@ export default function App() {
                         schedule
                       </span>
                       <div className="font-body-sm text-body-sm text-text-muted">
-                        Respons rata-rata dalam <strong className="text-text-primary">1x24 jam</strong>{' '}
+                        Respons rata-rata dalam{" "}
+                        <strong className="text-text-primary">1x24 jam</strong>{" "}
                         kerja untuk diskusi teknis &amp; proposal arsitektur.
                       </div>
                     </div>
@@ -1113,7 +1192,10 @@ export default function App() {
 
                   {/* Right: Interactive Contact Form */}
                   <div className="col-span-12 lg:col-span-7 bg-surface-card p-space-xl rounded-xl border border-border-subtle shadow-xl">
-                    <form className="space-y-space-md" onSubmit={handleContactSubmit}>
+                    <form
+                      className="space-y-space-md"
+                      onSubmit={handleContactSubmit}
+                    >
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
                         <div className="space-y-1.5">
                           <label
@@ -1205,19 +1287,24 @@ export default function App() {
                         className="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary-fixed font-headline-sm text-label-md flex items-center justify-center gap-2 shadow-[0_0_16px_rgba(0,210,211,0.35)] hover:bg-primary transition-all cursor-pointer"
                       >
                         <span className="material-symbols-outlined text-[20px]">
-                          {formSubmitted ? 'done' : 'send'}
+                          {formSubmitted ? "done" : "send"}
                         </span>
                         <span>
-                          {formSubmitted ? 'Pesan Terkirim' : 'Kirim Pesan Langsung'}
+                          {formSubmitted
+                            ? "Pesan Terkirim"
+                            : "Kirim Pesan Langsung"}
                         </span>
                       </button>
 
                       {formSubmitted && (
                         <div className="p-3.5 rounded-lg bg-primary-container/10 border border-primary-container/30 text-primary font-label-md text-label-md flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                           <span>
-                            Terima kasih, <strong>{formName}</strong>! Pesan mengenai &ldquo;
-                            {formSubject}&rdquo; telah diterima dan akan direspons ke{' '}
-                            <span className="underline">{formEmail}</span> dalam 1x24 jam.
+                            Terima kasih, <strong>{formName}</strong>! Pesan
+                            mengenai &ldquo;
+                            {formSubject}&rdquo; telah diterima dan akan
+                            direspons ke{" "}
+                            <span className="underline">{formEmail}</span> dalam
+                            1x24 jam.
                           </span>
                           <button
                             type="button"
@@ -1245,7 +1332,10 @@ export default function App() {
       />
 
       {/* Technical Note Reader Modal */}
-      <TechNoteModal note={selectedNote} onClose={() => setSelectedNote(null)} />
+      <TechNoteModal
+        note={selectedNote}
+        onClose={() => setSelectedNote(null)}
+      />
     </div>
   );
 }
